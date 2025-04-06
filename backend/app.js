@@ -1,4 +1,4 @@
-import express from "express"
+import express from "express";
 import dbConnection from "./src/config/db.js";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -7,6 +7,7 @@ import postRouter from "./src/routes/post.routes.js";
 import userRouter from "./src/routes/user.routes.js";
 import savedRouter from "./src/routes/saved.routes.js";
 import commentRouter from "./src/routes/comment.routes.js";
+import likeRouter from "./src/routes/like.routes.js";
 
 dotenv.config();
 
@@ -20,13 +21,14 @@ dbConnection();
 
 app.get("/", (req, res) => {
   res.send("Hello world");
-})
+});
 
 app.use("/auth", authRouter);
 app.use("/", userRouter);
 app.use("/api", postRouter);
 app.use("/posts", savedRouter);
-  app.use("/post", commentRouter);
+app.use("/post", commentRouter);
+app.use("/post", likeRouter);
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");
