@@ -24,11 +24,11 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRouter);
-app.use("/", userRouter);
-app.use("/api", postRouter);
-app.use("/posts", savedRouter);
-app.use("/post", commentRouter);
-app.use("/post", likeRouter);
+app.use("/user", userRouter);
+app.use("/posts", postRouter);
+app.use("/saves", savedRouter);
+app.use("/comments", commentRouter);
+app.use("/likes", likeRouter);
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");

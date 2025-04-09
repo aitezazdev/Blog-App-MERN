@@ -5,11 +5,11 @@ import Post from "../models/post.model.js";
 const savePost = async (req, res) => {
   try {
     const postId = req.params.id;
-    if(!postId){
+    if (!postId) {
       return res.status(400).json({
         success: false,
-        message: "Post id is required"
-      })
+        message: "Post id is required",
+      });
     }
 
     const user = await User.findById(req.user.id);
@@ -28,7 +28,7 @@ const savePost = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Post saved",
-      savedPost: postId
+      savedPost: postId,
     });
   } catch (error) {
     res.status(500).json({
@@ -42,11 +42,11 @@ const savePost = async (req, res) => {
 const unsavePost = async (req, res) => {
   try {
     const postId = req.params.id;
-    if(!postId){
+    if (!postId) {
       return res.status(400).json({
         success: false,
-        message: "Post id is required"
-      })
+        message: "Post id is required",
+      });
     }
 
     const user = await User.findById(req.user.id);
@@ -63,7 +63,7 @@ const unsavePost = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Post unsaved",
-      unsavedPost: postId
+      unsavedPost: postId,
     });
   } catch (error) {
     res.status(500).json({
