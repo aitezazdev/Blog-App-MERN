@@ -4,7 +4,7 @@ import { deleteAccount, updateProfile, viewProfile } from "../controllers/user.c
 
 const userRouter = express.Router();
 
-userRouter.post("/view-profile", authMiddleware, viewProfile);
+userRouter.get("/view-profile", authMiddleware, viewProfile);
 userRouter.put("/update-profile", authMiddleware, updateProfile);
 userRouter.delete("/delete-account", authMiddleware, deleteAccount);
 

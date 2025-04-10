@@ -25,7 +25,7 @@ const viewProfile = async (req, res) => {
 // update profile
 const updateProfile = async (req, res) => {
   try {
-    const { name, bio } = req.body;
+    const { name, bio } = req.body.profileData;
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({

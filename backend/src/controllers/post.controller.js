@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
+import Comment from "../models/comment.model.js";
 
 // create post
 const createPost = async (req, res) => {
@@ -63,10 +64,17 @@ const deletePost = async (req, res) => {
       });
     }
 
+    await Comment.deleteMany({ post: post._id });
+
     await post.deleteOne();
 
     const user = await User.findById(req.user.id);
     user.createdPosts.pull(post._id);
+    
+    await User.updateMany(
+      { savedPosts: post._id },
+      { $pull: { savedPosts: post._id } }
+    );
     await user.save();
 
     res.status(200).json({
@@ -85,7 +93,7 @@ const deletePost = async (req, res) => {
 // update post
 const updatePost = async (req, res) => {
   try {
-    const { title, content, tags } = req.body;
+    const { title, content, tags } = req.body.postData;
 
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -173,7 +181,7 @@ const getPostById = async (req, res) => {
 const getPostsByAuthor = async (req, res) => {
   try {
     const posts = await Post.find({ author: req.params.id }).populate("author");
-    if (posts.length === 0) {
+    if (posts.length === 0 || !posts) {
       return res.status(404).json({
         success: false,
         message: "Posts not created yet by this user",
