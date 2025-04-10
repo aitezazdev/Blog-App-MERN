@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
+import Comment from '../models/comment.model.js';
 
 // view profile
 const viewProfile = async (req, res) => {
@@ -52,26 +53,54 @@ const updateProfile = async (req, res) => {
 // delete account
 const deleteAccount = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "User not found"
       });
     }
 
-    await Post.deleteMany({ author: user._id });
+    const userPosts = await Post.find({ author: userId }, '_id');
+    const userPostIds = userPosts.map(post => post._id);
+
+    await Comment.deleteMany({ user: userId });
+
+    await Comment.deleteMany({ post: { $in: userPostIds } });
+
+    await Post.updateMany(
+      {},
+      { $pull: { comments: { $in: [] } } },
+      { multi: true }
+    );
+
+    await Post.updateMany({ likes: userId }, { $pull: { likes: userId } });
+
+    await User.updateMany(
+      { savedPosts: { $in: userPostIds } },
+      { $pull: { savedPosts: { $in: userPostIds } } }
+    );
+
+    await Post.deleteMany({ author: userId });
 
     await user.deleteOne();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "User account and posts deleted",
-      data: user,
+      message: "Account and all associated data deleted successfully"
     });
   } catch (error) {
-    console.log(error);
+    console.error("Delete account error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while deleting the account",
+      error: error.message
+    });
   }
 };
+
+
 
 export { viewProfile, updateProfile, deleteAccount };
