@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createPost, updatePost } from '../api';
+import { createPost, updatePost } from '../api/postsApi';
 import { toast } from 'react-hot-toast';
 import { X } from 'lucide-react';
 
@@ -64,11 +64,11 @@ const PostForm = ({ post = null, isEditing = false }) => {
       if (isEditing) {
         await updatePost(post._id, formData);
         toast.success('Post updated successfully');
-        navigate(`/posts/${post._id}`);
+        navigate("/");
       } else {
         await createPost(formData);
         toast.success('Post created successfully');
-        navigate('/'); // Navigate to home page after creating a new post
+        navigate('/');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong');

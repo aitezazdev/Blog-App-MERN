@@ -6,6 +6,7 @@ import {
   unsavePost,
   likePost,
   unlikePost,
+  deletePost,
 } from "../api/postsApi";
 import PostCard from "../Components/PostCard";
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
@@ -23,9 +24,10 @@ const Home = () => {
 
   useEffect(() => {
     fetchPosts();
-    if (user) {
-      dispatch(fetchSavedPosts());
+    if (!user || posts.length === 0) {
+      return;
     }
+    dispatch(fetchSavedPosts());
   }, [dispatch]);
 
   const isPostSaved = (postId) => {
@@ -60,20 +62,33 @@ const Home = () => {
     fetchPosts();
   };
 
+  const handlePostDeleted = (deletedPostId) => {
+    if (!user) return;
+    deletePost(deletedPostId);
+    setPosts((prevPosts) => prevPosts.filter(post => post._id !== deletedPostId));
+  };
+  
+
+  if (posts.length === 0) {
+    return <p className="text-center py-10 text-2xl font-semibold">No posts found</p>;
+  }
+
   return (
     <div>
       {posts.map((post) => (
         <PostCard
           key={post._id}
           post={post}
+          user={user}
           isSaved={isPostSaved(post._id)}
           savePost={() => handleSavePost(post._id)}
           unsavePost={() => handleUnsavePost(post._id)}
           isLiked={isPostLiked(post)}
           likePost={() => handleLikePost(post._id)}
           unlikePost={() => handleUnlikePost(post._id)}
+          onPostDeleted={handlePostDeleted}
         />
-      ))}
+      ))} 
     </div>
   );
 };

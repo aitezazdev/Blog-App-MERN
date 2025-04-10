@@ -1,5 +1,5 @@
-import axios from 'axios';
-import apiClient from './client';
+import axios from "axios";
+import apiClient from "./client";
 
 const API = "http://localhost:3000";
 
@@ -14,16 +14,18 @@ export const register = async (userData) => {
 };
 
 export const getUserProfile = async () => {
-  const response = await apiClient.get('/user/view-profile');
+  const response = await apiClient.get("/user/view-profile");
+  console.log(response.data);
   return response.data;
 };
 
 export const updateUserProfile = async (profileData) => {
-  const response = await apiClient.put('/user/update-profile', profileData);
+  const response = await apiClient.put("/user/update-profile", { profileData });
+  console.log(response.data);
   return response.data;
 };
 
 export const deleteUserAccount = async () => {
-  const response = await apiClient.delete('/user/delete-profile');
+  const response = await apiClient.delete("/user/delete-profile");
   return response.data;
 };

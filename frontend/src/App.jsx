@@ -8,6 +8,8 @@ import CreatePost from "./pages/CreatePost";
 import SavedPosts from "./pages/SavedPosts";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import PostDetails from "./Components/PostDetails";
+import EditPostPage from "./Components/EditPostPage";
+import ProfileCard from "./Components/ProfileCard";
 
 function App() {
   return (
@@ -20,8 +22,10 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<ProfileCard />} />
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/saved-posts" element={<SavedPosts />} />
+            <Route path="/edit-post/:id" element={<EditPostPage />} />
           </Route>
 
           <Route path="/post/:id" element={<PostDetails />} />

@@ -14,27 +14,41 @@ const Navbar = () => {
     navigate('/login');
   };
 
+  const getInitials = (name) => {
+    if (!name) return '';
+    
+    return name
+      .split(' ')
+      .map(word => word[0])
+      .join('')
+      .toUpperCase();
+  };
+
   return (
     <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-xl font-bold">BlogApp</Link>
         
-        <div className="flex space-x-4">
+        <div className="flex items-center space-x-4">
           <Link to="/" className="hover:text-gray-300">Home</Link>
           
           {user ? (
             <>
               <Link to="/create-post" className="hover:text-gray-300">Create Post</Link>
               <Link to="/saved-posts" className="hover:text-gray-300">Saved Posts</Link>
-              <Link to="/profile" className="hover:text-gray-300">
-                {user?.name || 'Profile'}
-              </Link>
               <button 
                 onClick={handleLogout}
                 className="hover:text-gray-300"
               >
                 Logout
               </button>
+              <Link 
+                to="/profile" 
+                className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium"
+                title={user?.name || 'Profile'}
+              >
+                {getInitials(user?.name)}
+              </Link>
             </>
           ) : (
             <>
