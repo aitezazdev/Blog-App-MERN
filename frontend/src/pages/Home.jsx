@@ -24,11 +24,13 @@ const Home = () => {
 
   useEffect(() => {
     fetchPosts();
-    if (!user || posts.length === 0) {
-      return;
-    }
+}, []);
+
+useEffect(() => {
+  if (user && !(posts.length === 0)) {
     dispatch(fetchSavedPosts());
-  }, [dispatch]);
+  }
+}, [user, posts, dispatch]);
 
   const isPostSaved = (postId) => {
     return user && savedPosts.some((post) => post._id === postId);

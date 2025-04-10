@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getUserProfile, updateUserProfile } from '../api/authApi';
+import { getUserProfile, updateUserProfile, deleteUserAccount } from '../api/authApi';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/Slices/authSlice';
 
 const ProfileCard = () => {
   const [profile, setProfile] = useState(null);
@@ -7,6 +10,8 @@ const ProfileCard = () => {
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -64,12 +69,22 @@ const ProfileCard = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUserAccount();
+      dispatch(logout());
+      navigate('/register');
+    } catch (err) {
+      console.error('Account deletion failed:', err);
+    }
+  };
+
   if (loading) return <div className="text-center py-4">Loading profile...</div>;
   if (error) return <div className="text-center py-4 text-red-500">{error}</div>;
   if (!profile) return <div className="text-center py-4">No profile data available</div>;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto">
+    <div className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto mt-10">
       <div className="flex items-center">
         <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-xl font-bold">
           {getInitials(profile.name)}
@@ -114,14 +129,15 @@ const ProfileCard = () => {
             <span className="font-medium">Saved:</span> {profile.savedPosts.length}
           </div>
           <div>
-            <span className="font-medium">Member since:</span> {new Date(profile.createdAt).toLocaleDateString()}
+            <span className="font-medium">Member since:</span>{' '}
+            {new Date(profile.createdAt).toLocaleDateString()}
           </div>
         </div>
       </div>
 
-      <div className="mt-6 flex justify-end items-center space-x-2">
+      <div className="mt-6 flex justify-between items-center">
         {editing ? (
-          <>
+          <div className="flex space-x-2">
             <button
               onClick={handleUpdateProfile}
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -134,7 +150,7 @@ const ProfileCard = () => {
             >
               Cancel
             </button>
-          </>
+          </div>
         ) : (
           <button
             onClick={() => setEditing(true)}
@@ -143,6 +159,13 @@ const ProfileCard = () => {
             Edit Profile
           </button>
         )}
+
+        <button
+          onClick={handleDeleteAccount}
+          className="text-red-600 hover:underline text-sm"
+        >
+          Delete Account
+        </button>
       </div>
     </div>
   );

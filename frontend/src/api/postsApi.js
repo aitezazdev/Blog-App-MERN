@@ -5,7 +5,6 @@ const API = "http://localhost:3000";
 
 export const getPosts = async () => {
   const response = await axios.get(`${API}/posts/all-posts`);
-  console.log(response.data);
   return response.data;
 };
 
@@ -38,7 +37,6 @@ export const deletePost = async (postId) => {
 
 export const likePost = async (postId) => {
   const response = await apiClient.post(`/likes/like/${postId}`);
-  console.log(response.data);
   return response.data;
 };
 
