@@ -8,6 +8,7 @@ import userRouter from "./src/routes/user.routes.js";
 import savedRouter from "./src/routes/saved.routes.js";
 import commentRouter from "./src/routes/comment.routes.js";
 import likeRouter from "./src/routes/like.routes.js";
+import searchFilterRouter from "./src/routes/searchFilter.routes.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/posts", postRouter);
 app.use("/saves", savedRouter);
 app.use("/comments", commentRouter);
 app.use("/likes", likeRouter);
+app.use("/user-posts", searchFilterRouter);
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");
