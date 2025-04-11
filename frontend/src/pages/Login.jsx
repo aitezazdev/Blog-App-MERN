@@ -6,6 +6,7 @@ import { MdOutlineError } from "react-icons/md";
 import { MdOutlineEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BiLoaderAlt } from "react-icons/bi";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -40,13 +41,14 @@ const Login = () => {
       setErrors({});
 
       navigate("/");
-
-      console.log("Login successful", result);
+      toast.success("Login Successful");
+      
     } catch (error) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         backend: error || "Login failed, please try again",
       }));
+      toast.error("Login failed, please try again");
     }
   };
 
@@ -65,8 +67,8 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-[480px] px-6 mt-10">
+    <div className="w-full min-h-[92vh] flex items-center justify-center bg-gray-50">
+      <div className="w-[480px] px-6">
         <form
           onSubmit={handleSubmit}
           className="bg-white shadow-xl rounded-xl px-8 pt-8 pb-10 border border-gray-200 transition-all">

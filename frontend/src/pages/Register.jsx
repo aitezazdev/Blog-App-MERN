@@ -7,6 +7,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BiLoaderAlt } from "react-icons/bi";
 import { FiUser } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -43,11 +44,13 @@ const Register = () => {
       setErrors({});
 
       navigate("/");
+      toast.success("Registration Successful");
     } catch (err) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         backend: err || "Registration failed. Please try again.",
       }));
+      toast.error("Registration failed. Please try again.");
     }
   };
 
@@ -66,8 +69,8 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-[480px] px-6 mt-20">
+    <div className="w-full min-h-[92vh] flex items-center justify-center bg-gray-50">
+      <div className="w-[480px] px-6">
         <form
           onSubmit={handleSubmit}
           className="bg-white shadow-xl rounded-xl px-8 pt-3 pb-3 border border-gray-200 transition-all">
