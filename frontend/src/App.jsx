@@ -15,7 +15,7 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#0f0f0f]">
       <Toaster />
       <ToastContainer />
       <Navbar />

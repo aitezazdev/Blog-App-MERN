@@ -22,26 +22,48 @@ const SavedPosts = () => {
     dispatch(fetchSavedPosts());
   };
 
-  if (loading) return <p className="text-center py-10">Loading saved posts...</p>;
-  if (error) return <p className="text-center text-red-500 py-10">{error}</p>;
+  if (loading)
+    return (
+      <p className="text-center py-10 text-neutral-400">
+        Loading your saved masterpieces...
+      </p>
+    );
+  if (error)
+    return (
+      <p className="text-center text-red-400 py-10">
+        Something exploded: {error}
+      </p>
+    );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-semibold mb-6">Your Bookmarked Posts</h2>
-      {savedPosts.length > 0 ? (
-        savedPosts.map((post) => (
-          <div key={post._id}>
-            <PostCard 
-              post={post} 
-              isSaved={true}
-              savePost={() => handleSavePost(post._id)}
-              unsavePost={() => handleUnsavePost(post._id)}
-            />
+    <div className="min-h-screen w-full bg-black text-white px-4 py-10">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold text-mint-400 mb-10 border-b border-neutral-800 pb-3">
+          Your Bookmarked Posts
+        </h2>
+
+        {savedPosts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {savedPosts.map((post) => (
+              <div
+                key={post._id}
+                className="bg-neutral-900 rounded-xl border border-neutral-800 shadow hover:shadow-lg transition"
+              >
+                <PostCard
+                  post={post}
+                  isSaved={true}
+                  savePost={() => handleSavePost(post._id)}
+                  unsavePost={() => handleUnsavePost(post._id)}
+                />
+              </div>
+            ))}
           </div>
-        ))
-      ) : (
-        <p className="text-center text-gray-500">No saved posts yet</p>
-      )}
+        ) : (
+          <p className="text-center text-neutral-500 pt-10">
+            No saved posts yet. Go hoard some knowledge.
+          </p>
+        )}
+      </div>
     </div>
   );
 };

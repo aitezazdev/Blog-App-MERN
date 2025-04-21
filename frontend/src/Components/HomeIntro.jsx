@@ -13,7 +13,7 @@ const HomeIntro = () => {
       <div className="flex items-center bg-[#0f0f0f] border border-gray-700 rounded-xl px-4 py-2 w-full max-w-md">
         <input
           type="text"
-          placeholder="Search Blogd"
+          placeholder="Search Blogs"
           className="bg-transparent outline-none text-white flex-grow placeholder-gray-500"
         />
         <FiSearch className="text-white text-xl" />

@@ -75,7 +75,7 @@ useEffect(() => {
   
 
   if (posts.length === 0) {
-    return <p className="text-center py-10 pb-20 text-2xl font-semibold">No posts found</p>;
+    return <p className="text-center py-10 text-2xl font-semibold">No posts found</p>;
   }
 
   return (
