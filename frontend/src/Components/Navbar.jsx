@@ -1,14 +1,14 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/Slices/authSlice";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -18,7 +18,6 @@ const Navbar = () => {
 
   const getInitials = (name) => {
     if (!name) return "";
-
     return name
       .split(" ")
       .map((word) => word[0])
@@ -26,49 +25,75 @@ const Navbar = () => {
       .toUpperCase();
   };
 
-  return (
-    <nav className="bg-gray-800 text-white p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold">
-          BlogApp
-        </Link>
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
 
-        <div className="flex items-center space-x-4">
-          <Link to="/" className="hover:text-gray-300">
-            Home
+  return (
+    <>
+      <nav className={`fixed top-0 left-0 right-0 z-10 text-white bg-black p-4 transition-all duration-300`}>
+        <div className="container mx-auto flex justify-between items-center">
+          <Link to="/" className="text-xl font-bold">
+            BlogApp
           </Link>
 
-          {user ? (
-            <>
-              <Link to="/create-post" className="hover:text-gray-300">
-                Create Post
-              </Link>
-              <Link to="/saved-posts" className="hover:text-gray-300">
-                Saved Posts
-              </Link>
-              <button onClick={handleLogout} className="hover:text-gray-300">
-                Logout
-              </button>
-              <Link
-                to="/profile"
-                className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium"
-                title={user?.name || "Profile"}>
-                {getInitials(user?.name)}
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="hover:text-gray-300">
-                Login
-              </Link>
-              <Link to="/register" className="hover:text-gray-300">
-                Register
-              </Link>
-            </>
-          )}
+          <div className="flex items-center space-x-6">
+            <Link 
+              to="/" 
+              className={`relative pb-1 px-1 transition-colors ${isActive('/') ? 'text-white' : 'text-gray-300 hover:text-white'}`}
+            >
+              Home
+              {isActive('/') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-full"></span>}
+            </Link>
+
+            {user ? (
+              <>
+                <Link 
+                  to="/saved-posts" 
+                  className={`relative pb-1 px-1 transition-colors ${isActive('/saved-posts') ? 'text-white' : 'text-gray-300 hover:text-white'}`}
+                >
+                  Saved Posts
+                  {isActive('/saved-posts') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-full"></span>}
+                </Link>
+                <button 
+                  onClick={handleLogout} 
+                  className="text-gray-300 hover:text-white transition-colors"
+                >
+                  Logout
+                </button>
+                <Link
+                  to="/profile"
+                  className={`w-9 h-9 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium transition-transform hover:scale-105 ${isActive('/profile') ? 'ring-2 ring-blue-300' : ''}`}
+                  title={user?.name || "Profile"}
+                >
+                  {getInitials(user?.name)}
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link 
+                  to="/login" 
+                  className={`relative pb-1 px-1 transition-colors ${isActive('/login') ? 'text-white' : 'text-gray-300 hover:text-white'}`}
+                >
+                  Login
+                  {isActive('/login') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-full"></span>}
+                </Link>
+                <Link 
+                  to="/register" 
+                  className={`relative pb-1 px-1 transition-colors ${isActive('/register') ? 'text-white' : 'text-gray-300 hover:text-white'}`}
+                >
+                  Register
+                  {isActive('/register') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-full"></span>}
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+      
+      
+      <div className="pt-16"></div>
+    </>
   );
 };
 

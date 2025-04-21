@@ -13,17 +13,13 @@ import ProfileCard from "./Components/ProfileCard";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 
-// Inside App
-<ToastContainer position="top-right" autoClose={3000} />
-
-
 function App() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Toaster />
       <ToastContainer />
       <Navbar />
-      <main className="pb-12">
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

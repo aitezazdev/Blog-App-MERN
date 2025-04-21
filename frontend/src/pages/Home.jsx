@@ -10,6 +10,9 @@ import {
 } from "../api/postsApi";
 import PostCard from "../Components/PostCard";
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
+import { Link } from "react-router-dom";
+import { Plus } from "lucide-react";
+import HomeIntro from "../Components/HomeIntro";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -72,27 +75,42 @@ useEffect(() => {
   
 
   if (posts.length === 0) {
-    return <p className="text-center py-10 text-2xl font-semibold">No posts found</p>;
+    return <p className="text-center py-10 pb-20 text-2xl font-semibold">No posts found</p>;
   }
 
   return (
-    <div>
-      {posts.map((post) => (
-        <PostCard
-          key={post._id}
-          post={post}
-          user={user}
-          isSaved={isPostSaved(post._id)}
-          savePost={() => handleSavePost(post._id)}
-          unsavePost={() => handleUnsavePost(post._id)}
-          isLiked={isPostLiked(post)}
-          likePost={() => handleLikePost(post._id)}
-          unlikePost={() => handleUnlikePost(post._id)}
-          onPostDeleted={handlePostDeleted}
-        />
-      ))} 
+    <div className="bg-[#0f0f0f] min-h-screen pb-20">
+      <HomeIntro />
+  
+      <div className="w-[90%] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+        {posts.map((post) => (
+          <PostCard
+            key={post._id}
+            post={post}
+            user={user}
+            isSaved={isPostSaved(post._id)}
+            savePost={() => handleSavePost(post._id)}
+            unsavePost={() => handleUnsavePost(post._id)}
+            isLiked={isPostLiked(post)}
+            likePost={() => handleLikePost(post._id)}
+            unlikePost={() => handleUnlikePost(post._id)}
+            onPostDeleted={handlePostDeleted}
+          />
+        ))}
+      </div>
+  
+      {user && (
+        <Link
+          to="/create-post"
+          className="fixed bottom-20 right-20 w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg hover:bg-blue-700 transition-all hover:scale-110 z-20"
+          title="Create Post"
+        >
+          <Plus size={24} />
+        </Link>
+      )}
     </div>
   );
+  
 };
 
 export default Home;

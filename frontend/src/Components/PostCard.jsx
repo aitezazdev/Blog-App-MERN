@@ -35,11 +35,8 @@ const PostCard = ({
         setShowMenu(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleEditPost = () => {
@@ -50,17 +47,9 @@ const PostCard = ({
   const handleDeletePost = async () => {
     try {
       setIsDeleting(true);
-      
-      if (onPostDeleted) {
-        onPostDeleted(post._id);
-      }
-      
+      if (onPostDeleted) onPostDeleted(post._id);
       setShowMenu(false);
       toast.success("Post deleted successfully");
-
-      if (onPostDeleted) {
-        onPostDeleted(post._id);
-      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete post");
       console.error("Error deleting post:", error);
@@ -69,35 +58,48 @@ const PostCard = ({
     }
   };
 
+  const getTruncatedContent = (content, wordLimit = 30) => {
+    const words = content.trim().split(" ");
+    return words.length <= wordLimit
+      ? content
+      : words.slice(0, wordLimit).join(" ") + "…";
+  };
+
   return (
-    <div className="bg-white w-2/3 mx-auto my-5 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 overflow-hidden">
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-2">
-          <h2 className="text-2xl font-semibold text-gray-800 hover:text-blue-600 transition-colors line-clamp-2">
+    <div className="bg-[#161616] rounded-2xl shadow-lg hover:shadow-blue-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col justify-between h-[260px]">
+      <div className="p-6 flex flex-col flex-grow">
+        <div className="flex justify-between items-start mb-3">
+          <Link
+            to={`/post/${post._id}`}
+            className="text-2xl font-semibold text-white hover:text-blue-400 transition-colors line-clamp-2"
+          >
             {post.title}
-          </h2>
+          </Link>
 
           {isAuthor && (
             <div className="relative" ref={menuRef}>
               <button
-                className="text-gray-500 hover:text-gray-700 p-1 rounded-full cursor-pointer"
+                className="text-gray-400 hover:text-gray-200 p-1 rounded-full cursor-pointer"
                 onClick={() => setShowMenu(!showMenu)}
-                disabled={isDeleting}>
+                disabled={isDeleting}
+              >
                 <FaEllipsisV />
               </button>
 
               {showMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                <div className="absolute right-0 mt-2 w-48 bg-[#1f1f1f] text-white rounded-md shadow-lg z-10 border border-[#2a2a2a]">
                   <div className="py-1">
                     <button
                       onClick={handleEditPost}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2">
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-[#2a2a2a] flex items-center gap-2"
+                    >
                       <FaEdit /> Edit Post
                     </button>
                     <button
                       onClick={handleDeletePost}
                       disabled={isDeleting}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center gap-2">
+                      className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-[#2a2a2a] flex items-center gap-2"
+                    >
                       <FaTrash /> {isDeleting ? "Deleting..." : "Delete Post"}
                     </button>
                   </div>
@@ -107,16 +109,23 @@ const PostCard = ({
           )}
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-          {post.content}
-        </p>
-        <div className="text-xs text-gray-500 mb-5">
+        <Link
+          to={`/post/${post._id}`}
+          className="text-gray-300 mb-4 hover:text-gray-100 transition line-clamp-4 flex-grow"
+        >
+          {getTruncatedContent(post.content)}
+        </Link>
+
+        <div className="text-xs text-gray-500 mb-5 mt-auto">
           Posted by{" "}
-          <span className="font-medium">{post.author?.name || "Unknown"}</span>{" "}
+          <span className="font-medium text-white">
+            {post.author?.name || "Unknown"}
+          </span>{" "}
           on {formattedDate}
         </div>
-        <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-6 text-gray-500">
+
+        <div className="flex justify-between items-center pt-4 border-t border-gray-700">
+          <div className="flex items-center gap-6 text-gray-400">
             <div className="flex items-center gap-1 cursor-pointer hover:text-red-500 transition">
               <SaveLikeButton
                 post={post}
@@ -127,12 +136,13 @@ const PostCard = ({
             </div>
             <Link
               to={`/post/${post._id}`}
-              className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition">
+              className="flex items-center gap-1 cursor-pointer hover:text-blue-400 transition"
+            >
               <FaRegCommentDots />
               <span className="text-sm">{post.comments?.length || 0}</span>
             </Link>
           </div>
-          <div className="cursor-pointer text-gray-500 hover:text-blue-600 transition">
+          <div className="cursor-pointer text-gray-400 hover:text-blue-500 transition">
             <SavePostButton
               post={post}
               isSaved={isSaved}
