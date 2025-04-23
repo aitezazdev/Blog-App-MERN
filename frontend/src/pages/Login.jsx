@@ -62,7 +62,7 @@ const Login = () => {
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <MdOutlineEmail className="w-5 h-5 text-neutral-500" />
                 </div>
-                <input
+                <input autoComplete="off"
                   onChange={handleChange}
                   value={data.email}
                   className="w-full pl-10 py-3 px-4 text-white bg-neutral-800 rounded-lg border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-mint-400 transition-all"
@@ -81,7 +81,7 @@ const Login = () => {
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <RiLockPasswordLine className="w-5 h-5 text-neutral-500" />
                 </div>
-                <input
+                <input autoComplete="off"
                   onChange={handleChange}
                   value={data.password}
                   className="w-full pl-10 py-3 px-4 text-white bg-neutral-800 rounded-lg border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-mint-400 transition-all"

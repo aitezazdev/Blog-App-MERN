@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Comment from "./Comment";
 import { getPostComments, createComment, updateComment, deleteComment } from "../api/commentsApi";
+import toast from "react-hot-toast";
 
 const CommentsSection = ({ postId, user, initialComments = [] }) => {
   const [comments, setComments] = useState(initialComments);
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
   useEffect(() => {
     if (initialComments && initialComments.length > 0) {
       setComments(initialComments);
@@ -30,6 +32,7 @@ const CommentsSection = ({ postId, user, initialComments = [] }) => {
     try {
       setIsSubmitting(true);
       await createComment(postId, commentText);
+      toast.success("Comment posted");
       await fetchComments();
       setCommentText("");
     } catch (error) {
@@ -44,6 +47,7 @@ const CommentsSection = ({ postId, user, initialComments = [] }) => {
     
     try {
       await updateComment(commentId, content);
+      toast.success("Comment updated");
       await fetchComments();
     } catch (error) {
       console.error("Failed to update comment:", error);
@@ -55,6 +59,7 @@ const CommentsSection = ({ postId, user, initialComments = [] }) => {
     
     try {
       await deleteComment(commentId);
+      toast.success("Comment deleted");
       await fetchComments();
     } catch (error) {
       console.error("Failed to delete comment:", error);
@@ -62,16 +67,16 @@ const CommentsSection = ({ postId, user, initialComments = [] }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
+    <div className="bg-[#1a1a1a] rounded-xl shadow-lg border border-gray-800 overflow-hidden">
       <div className="p-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        <h2 className="text-xl font-semibold text-gray-100 mb-6">
           Comments ({comments.length || 0})
         </h2>
 
         {user ? (
           <form className="mb-8" onSubmit={handleSubmit}>
-            <textarea
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            <textarea spellCheck="false"
+              className="w-full px-4 py-3 bg-[#252525] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 transition text-gray-200"
               rows="3"
               placeholder="Write a comment..."
               value={commentText}
@@ -79,15 +84,15 @@ const CommentsSection = ({ postId, user, initialComments = [] }) => {
               disabled={isSubmitting}
             ></textarea>
             <button 
-              className="mt-3 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition disabled:opacity-50"
+              className="mt-3 px-6 py-2 bg-emerald-600 hover:bg-emerald-700 cursor-pointer text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting || !commentText.trim()}
             >
               {isSubmitting ? "Posting..." : "Post Comment"}
             </button>
           </form>
         ) : (
-          <div className="mb-8 p-4 bg-gray-50 rounded-lg text-center">
-            <p className="text-gray-600">Please sign in to post a comment.</p>
+          <div className="mb-8 p-4 bg-[#252525] rounded-lg text-center">
+            <p className="text-gray-400">Please sign in to post a comment.</p>
           </div>
         )}
 
@@ -103,7 +108,7 @@ const CommentsSection = ({ postId, user, initialComments = [] }) => {
               />
             ))
           ) : (
-            <div className="py-6 text-center text-gray-500">
+            <div className="py-6 text-center text-gray-400">
               No comments yet. Be the first to comment!
             </div>
           )}

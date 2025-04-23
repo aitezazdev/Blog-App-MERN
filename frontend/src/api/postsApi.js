@@ -59,8 +59,3 @@ export const getSavedPosts = async () => {
   const response = await apiClient.get("/saves/saved");
   return response.data;
 };
-
-export const searchPosts = async (params) => {
-  const response = await axios.get("/posts/search", { params });
-  return response.data;
-};

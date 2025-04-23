@@ -7,11 +7,11 @@ import Register from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
 import SavedPosts from "./pages/SavedPosts";
 import ProtectedRoute from "./Components/ProtectedRoute";
-import PostDetails from "./Components/PostDetails";
-import EditPostPage from "./Components/EditPostPage";
+import PostDetails from "./pages/PostDetails";
 import ProfileCard from "./Components/ProfileCard";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
+import EditPostPage from "./pages/EditPost";
 
 function App() {
   return (

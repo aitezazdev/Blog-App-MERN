@@ -31,7 +31,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-10 text-white bg-black p-5 transition-all duration-300`}>
+      <nav className="fixed top-0 left-0 right-0 z-50 text-white bg-black p-5 transition-all duration-300">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="text-xl font-bold">
             BlogApp
@@ -43,7 +43,7 @@ const Navbar = () => {
               className={`relative pb-1 px-1 transition-colors ${isActive('/') ? 'text-white' : 'text-gray-300 hover:text-white'}`}
             >
               Home
-              {isActive('/') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-full"></span>}
+              {isActive('/') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 rounded-full"></span>}
             </Link>
 
             {user ? (
@@ -53,7 +53,7 @@ const Navbar = () => {
                   className={`relative pb-1 px-1 transition-colors ${isActive('/saved-posts') ? 'text-white' : 'text-gray-300 hover:text-white'}`}
                 >
                   Saved Posts
-                  {isActive('/saved-posts') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-full"></span>}
+                  {isActive('/saved-posts') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 rounded-full"></span>}
                 </Link>
                 <button 
                   onClick={handleLogout} 
@@ -63,7 +63,7 @@ const Navbar = () => {
                 </button>
                 <Link
                   to="/profile"
-                  className={`w-9 h-9 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium transition-transform hover:scale-105 ${isActive('/profile') ? 'ring-2 ring-blue-300' : ''}`}
+                  className={`w-9 h-9 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium transition-transform hover:scale-105 ${isActive('/profile') ? 'ring-2 ring-emerald-300' : ''}`}
                   title={user?.name || "Profile"}
                 >
                   {getInitials(user?.name)}
@@ -76,14 +76,14 @@ const Navbar = () => {
                   className={`relative pb-1 px-1 transition-colors ${isActive('/login') ? 'text-white' : 'text-gray-300 hover:text-white'}`}
                 >
                   Login
-                  {isActive('/login') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-full"></span>}
+                  {isActive('/login') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 rounded-full"></span>}
                 </Link>
                 <Link 
                   to="/register" 
                   className={`relative pb-1 px-1 transition-colors ${isActive('/register') ? 'text-white' : 'text-gray-300 hover:text-white'}`}
                 >
                   Register
-                  {isActive('/register') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-full"></span>}
+                  {isActive('/register') && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-400 rounded-full"></span>}
                 </Link>
               </>
             )}

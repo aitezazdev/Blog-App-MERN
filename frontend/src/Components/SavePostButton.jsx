@@ -13,7 +13,7 @@ const SavePostButton = ({ isSaved, savePost, unsavePost }) => {
   };
 
   return (
-    <div className="text-blue-400" onClick={toggleSave}>
+    <div className="text-emerald-400" onClick={toggleSave}>
       {isSaved ? <FaBookmark size={18} /> : <FaRegBookmark size={18} />}
     </div>
   );

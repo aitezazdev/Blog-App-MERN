@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaRegCommentDots, FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
+import { FaRegCommentDots, FaEllipsisV, FaEdit, FaTrash, FaTag } from "react-icons/fa";
 import SavePostButton from "./SavePostButton";
 import SaveLikeButton from "./SaveLikeButton";
 import { Link, useNavigate } from "react-router-dom";
@@ -58,7 +58,7 @@ const PostCard = ({
     }
   };
 
-  const getTruncatedContent = (content, wordLimit = 30) => {
+  const getTruncatedContent = (content, wordLimit = 12) => {
     const words = content.trim().split(" ");
     return words.length <= wordLimit
       ? content
@@ -66,12 +66,12 @@ const PostCard = ({
   };
 
   return (
-    <div className="bg-[#161616] rounded-2xl shadow-lg hover:shadow-blue-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col justify-between h-[260px]">
+    <div className="bg-[#202020] rounded-2xl shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col justify-between h-[300px]">
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-3">
           <Link
             to={`/post/${post._id}`}
-            className="text-2xl font-semibold text-white hover:text-blue-400 transition-colors line-clamp-2"
+            className="text-2xl font-semibold text-white hover:text-emerald-400 transition-colors line-clamp-2"
           >
             {post.title}
           </Link>
@@ -111,12 +111,26 @@ const PostCard = ({
 
         <Link
           to={`/post/${post._id}`}
-          className="text-gray-300 mb-4 hover:text-gray-100 transition line-clamp-4 flex-grow"
+          className="text-gray-300 mb-2 hover:text-gray-100 transition line-clamp-4 flex-grow"
         >
           {getTruncatedContent(post.content)}
         </Link>
 
-        <div className="text-xs text-gray-500 mb-5 mt-auto">
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {post.tags.map((tag, index) => (
+              <span 
+                key={index}
+                className="text-xs bg-[#2a2a2a] text-emerald-400 px-2 py-1 rounded-md hover:bg-emerald-900/30 transition-colors flex items-center gap-1"
+              >
+                #
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div className="text-xs text-gray-500 mb-2 mt-auto">
           Posted by{" "}
           <span className="font-medium text-white">
             {post.author?.name || "Unknown"}
@@ -136,13 +150,13 @@ const PostCard = ({
             </div>
             <Link
               to={`/post/${post._id}`}
-              className="flex items-center gap-1 cursor-pointer hover:text-blue-400 transition"
+              className="flex items-center gap-1 cursor-pointer hover:text-emerald-400 transition"
             >
               <FaRegCommentDots />
               <span className="text-sm">{post.comments?.length || 0}</span>
             </Link>
           </div>
-          <div className="cursor-pointer text-gray-400 hover:text-blue-500 transition">
+          <div className="cursor-pointer text-gray-400 hover:text-emerald-500 transition">
             <SavePostButton
               post={post}
               isSaved={isSaved}

@@ -31,6 +31,10 @@ const PostForm = ({ post = null, isEditing = false }) => {
 
   const addTag = () => {
     const trimmedTag = tagInput.trim().toLowerCase();
+    if(tags.includes(trimmedTag)) {
+      toast.error('Tag already exists');
+      return;
+    }
     if (trimmedTag && !tags.includes(trimmedTag) && tags.length < 5) {
       setTags([...tags, trimmedTag]);
       setTagInput('');
@@ -80,108 +84,98 @@ const PostForm = ({ post = null, isEditing = false }) => {
   };
   
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        {isEditing ? 'Edit Post' : 'Create New Post'}
-      </h2>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-          <span className="block sm:inline">{error}</span>
-        </div>
-      )}
-      
-      <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-        <input
-          id="title"
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter a descriptive title"
-          required
-        />
-      </div>
-      
-      <div>
-        <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">Content</label>
-        <textarea
-          id="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows="12"
-          className="block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Write your post content here..."
-          required
-        />
-        <p className="mt-1 text-sm text-gray-500">
-          {content.length} characters | {content.split(/\s+/).filter(Boolean).length} words
-        </p>
-      </div>
-      
-      <div>
-        <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">
-          Tags <span className="text-gray-500 text-xs">(max 5)</span>
-        </label>
-        <div className="flex flex-wrap gap-2 mb-2">
-          {tags.map((tag) => (
-            <span 
-              key={tag} 
-              className="inline-flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm"
-            >
-              #{tag}
-              <button 
-                type="button" 
-                onClick={() => removeTag(tag)}
-                className="ml-1 text-blue-600 hover:text-blue-800"
-              >
-                <X size={14} />
-              </button>
-            </span>
-          ))}
-        </div>
-        <div className="flex">
-          <input
-            id="tagInput"
-            type="text"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={handleTagInputKeyDown}
-            onBlur={addTag}
-            placeholder="Add a tag and press Enter"
-            className="block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500"
-            disabled={tags.length >= 5}
-          />
+<form onSubmit={handleSubmit} className="space-y-6">
+  {error && (
+    <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
+      {error}
+    </div>
+  )}
+
+  <div>
+    <label htmlFor="title" className="block text-sm font-semibold mb-2">Title</label>
+    <input
+      id="title"
+      type="text"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+      placeholder="Catchy title goes here..."
+      required
+    />
+  </div>
+
+  <div>
+    <label htmlFor="content" className="block text-sm font-semibold mb-2">Content</label>
+    <textarea
+      id="content"
+      value={content}
+      onChange={(e) => setContent(e.target.value)}
+      rows="10"
+      className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+      placeholder="Write something great..."
+      required
+    />
+    <p className="mt-1 text-sm text-gray-500">
+      {content.length} characters • {content.trim().split(/\s+/).filter(Boolean).length} words
+    </p>
+  </div>
+
+  <div>
+    <label htmlFor="tags" className="block text-sm font-semibold mb-2">Tags <span className="text-gray-400">(up to 5)</span></label>
+    <div className="flex flex-wrap gap-2 mb-2">
+      {tags.map(tag => (
+        <span key={tag} className="inline-flex items-center bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm font-medium">
+          #{tag}
           <button
             type="button"
-            onClick={addTag}
-            disabled={!tagInput.trim() || tags.length >= 5}
-            className="ml-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
+            onClick={() => removeTag(tag)}
+            className="ml-1 text-emerald-600 hover:text-emerald-800"
           >
-            Add
+            <X size={14} />
           </button>
-        </div>
-        <p className="mt-1 text-sm text-gray-500">Press Enter or comma to add a tag</p>
-      </div>
-      
-      <div className="flex justify-between pt-4">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="py-2 px-6 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400"
-        >
-          {isSubmitting ? 'Submitting...' : isEditing ? 'Update Post' : 'Publish Post'}
-        </button>
-      </div>
-    </form>
+        </span>
+      ))}
+    </div>
+    <div className="flex">
+      <input
+        id="tagInput"
+        type="text"
+        value={tagInput}
+        onChange={(e) => setTagInput(e.target.value)}
+        onKeyDown={handleTagInputKeyDown}
+        placeholder="Press Enter to add"
+        className="flex-1 border border-gray-300 rounded-l-xl p-3 focus:ring-1 focus:outline-none focus:ring-emerald-300"
+      />
+      <button
+        type="button"
+        onClick={addTag}
+        disabled={!tagInput.trim()}
+        className="px-4 bg-emerald-600 text-white font-medium text-sm rounded-r-xl hover:bg-emerald-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+      >
+        Add
+      </button>
+    </div>
+    <p className="text-sm text-gray-500 mt-1">Use comma or Enter to add new tag</p>
+  </div>
+
+  <div className="flex justify-end space-x-4 pt-4">
+    <button
+      type="button"
+      onClick={() => navigate(-1)}
+      className="py-2 px-5 border border-gray-300 rounded-lg text-sm text-gray-600 bg-gray-50 hover:bg-gray-200 cursor-pointer"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      className="py-2 px-6 bg-emerald-600 cursor-pointer text-white text-sm font-medium rounded-lg hover:bg-emerald-700 disabled:bg-emerald-400"
+    >
+      {isSubmitting ? 'Submitting...' : isEditing ? 'Update Post' : 'Publish Post'}
+    </button>
+  </div>
+</form>
+
   );
 };
 

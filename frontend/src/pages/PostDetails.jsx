@@ -11,7 +11,7 @@ import {
 } from "../api";
 import { FaHeart, FaRegHeart, FaRegBookmark, FaBookmark, FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
-import CommentsSection from "./CommentsSection";
+import CommentsSection from "../Components/CommentsSection";
 
 const PostDetails = () => {
   const { id } = useParams();
@@ -137,16 +137,16 @@ const PostDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-xl text-gray-600">Loading post details...</div>
+      <div className="flex justify-center items-center min-h-screen bg-[#0f0f0f] text-gray-300">
+        <div className="text-xl">Loading post details...</div>
       </div>
     );
   }
 
   if (!post) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-xl text-gray-600">Post not found</div>
+      <div className="flex justify-center items-center min-h-screen bg-[#0f0f0f] text-gray-300">
+        <div className="text-xl">Post not found</div>
       </div>
     );
   }
@@ -158,35 +158,35 @@ const PostDetails = () => {
   });
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
-      <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden mb-8">
+    <div className="max-w-3xl mx-auto py-8 px-4 bg-[#0f0f0f] text-gray-200">
+      <div className="bg-[#1a1a1a] rounded-xl shadow-lg border border-gray-800 overflow-hidden mb-8">
         <div className="p-6">
-          <div className="flex justify-between items-start mb-3">
-            <h1 className="text-3xl font-semibold text-gray-800">
+          <div className="flex justify-between items-start mb-4">
+            <h1 className="text-3xl font-semibold text-gray-100">
               {post.title}
             </h1>
             
             {isAuthor && (
               <div className="relative" ref={menuRef}>
                 <button 
-                  className="text-gray-500 hover:text-gray-700 p-1 rounded-full"
+                  className="text-gray-400 hover:text-emerald-400 p-1 rounded-full"
                   onClick={() => setShowMenu(!showMenu)}
                 >
                   <FaEllipsisV />
                 </button>
                 
                 {showMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                  <div className="absolute right-0 mt-2 w-48 bg-[#252525] rounded-md shadow-lg z-10 border border-gray-700">
                     <div className="py-1">
                       <button
                         onClick={handleEditPost}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-[#333333] flex items-center gap-2"
                       >
                         <FaEdit /> Edit Post
                       </button>
                       <button
                         onClick={handleDeletePost}
-                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center gap-2"
+                        className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-[#333333] flex items-center gap-2"
                       >
                         <FaTrash /> Delete Post
                       </button>
@@ -198,20 +198,20 @@ const PostDetails = () => {
           </div>
           
           <div className="flex items-center gap-2 mb-5">
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-400">
               Posted by{" "}
-              <span className="font-medium">
+              <span className="font-medium text-emerald-400">
                 {post.author?.name || "Unknown"}
               </span>{" "}
               on {formattedDate}
             </span>
           </div>
 
-          <div className="text-gray-700 mb-6 leading-relaxed">
+          <div className="text-gray-300 mb-6 leading-relaxed">
             <p>{post.content}</p>
           </div>
 
-          <div className="pt-4 border-t border-gray-100">
+          <div className="pt-4 border-t border-gray-800">
             <div className="flex justify-between items-center">
               <div
                 className="flex items-center gap-2 cursor-pointer"
@@ -220,24 +220,24 @@ const PostDetails = () => {
                   <div className="flex items-center text-red-500">
                     <FaHeart className="mr-1" />
                     <span className="text-sm">
-                      {post.likes?.length || 0} likes
+                      {post.likes?.length || 0} { post.likes?.length === 1 ? "like" : "likes" }
                     </span>
                   </div>
                 ) : (
-                  <div className="flex items-center text-gray-500 hover:text-red-500 transition">
+                  <div className="flex items-center text-gray-400 hover:text-red-500 transition">
                     <FaRegHeart className="mr-1" />
                     <span className="text-sm">
-                      {post.likes?.length || 0} likes
+                      {post.likes?.length || 0} { post.likes?.length === 1 ? "like" : "likes" }
                     </span>
                   </div>
                 )}
               </div>
 
               <div
-                className="cursor-pointer text-gray-500 hover:text-blue-600 transition"
+                className="cursor-pointer text-gray-400 hover:text-emerald-400 transition"
                 onClick={toggleSave}>
                 {isPostSaved() ? (
-                  <FaBookmark size={18} />
+                  <FaBookmark size={18} className="text-emerald-400" />
                 ) : (
                   <FaRegBookmark size={18} />
                 )}

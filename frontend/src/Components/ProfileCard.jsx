@@ -114,7 +114,7 @@ const ProfileCard = () => {
   return (
     <div className="bg-[#171616] rounded-lg shadow-xl p-8 w-[550px] mx-auto mt-10 text-gray-100 border border-[#1f1e1e]">
       <div className="flex items-center">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-md">
           {profile.avatarUrl ? (
             <img src={profile.avatarUrl} alt={profile.name} className="w-20 h-20 rounded-full object-cover" />
           ) : (
@@ -128,7 +128,7 @@ const ProfileCard = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="text-xl font-semibold bg-[#1f1e1e] border-b border-gray-600 focus:outline-none focus:border-blue-500 text-white w-full px-2 py-1"
+              className="text-xl font-semibold bg-[#1f1e1e] border-b border-gray-600 focus:outline-none focus:border-emerald-500 text-white w-full px-2 py-1"
               placeholder="Your name"
             />
           ) : (
@@ -165,7 +165,7 @@ const ProfileCard = () => {
 
       <div className="mt-6 grid grid-cols-3 gap-4 text-center">
         <div className="bg-[#1f1e1e] rounded-lg p-3">
-          <p className="text-2xl font-bold text-blue-400">{profile.createdPosts.length}</p>
+          <p className="text-2xl font-bold text-emerald-400">{profile.createdPosts.length}</p>
           <p className="text-xs uppercase tracking-wider text-gray-400 mt-1">Posts</p>
         </div>
         
@@ -191,7 +191,7 @@ const ProfileCard = () => {
             <button
               onClick={handleUpdateProfile}
               disabled={loading}
-              className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center transition duration-150 disabled:opacity-50"
+              className="bg-emerald-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-emerald-700 flex items-center transition duration-150 disabled:opacity-50"
             >
               {loading ? (
                 <>
