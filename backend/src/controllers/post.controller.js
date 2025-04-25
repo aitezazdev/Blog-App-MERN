@@ -1,16 +1,42 @@
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import Comment from "../models/comment.model.js";
+import cloudinary from "../config/cloudinary.js";
 
 // create post
 const createPost = async (req, res) => {
   try {
     const { title, content, tags } = req.body;
 
-    if (!title || !content) {
+    if (!title) {
       return res.status(400).json({
         success: false,
-        message: "Title and content are required",
+        message: "title is required",
+      });
+    }
+
+    if (!content) {
+      return res.status(400).json({
+        success: false,
+        message: "content is required",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "image file is required",
+      });
+    }
+
+    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+      folder: "posts",
+    });
+
+    if(!uploadResult.secure_url) {
+      return res.status(500).json({
+        success: false,
+        message: "Error uploading image",
       });
     }
 
@@ -25,6 +51,7 @@ const createPost = async (req, res) => {
     const post = await Post.create({
       title,
       content,
+      image: uploadResult.secure_url,
       tags: tags || [],
       author: user._id,
       likes: [],
