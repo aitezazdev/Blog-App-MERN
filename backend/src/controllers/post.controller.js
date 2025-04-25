@@ -1,3 +1,4 @@
+import fs from "fs";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import Comment from "../models/comment.model.js";
@@ -51,7 +52,10 @@ const createPost = async (req, res) => {
     const post = await Post.create({
       title,
       content,
-      image: uploadResult.secure_url,
+      image: {
+        url: uploadResult.secure_url,
+        public_id: uploadResult.public_id,
+      },
       tags: tags || [],
       author: user._id,
       likes: [],
@@ -91,6 +95,10 @@ const deletePost = async (req, res) => {
       });
     }
 
+    if (post.image?.public_id) {
+      await cloudinary.uploader.destroy(post.image.public_id);
+    }
+
     await Comment.deleteMany({ post: post._id });
 
     await post.deleteOne();
@@ -120,7 +128,7 @@ const deletePost = async (req, res) => {
 // update post
 const updatePost = async (req, res) => {
   try {
-    const { title, content, tags } = req.body.postData;
+    const { title, content, tags } = req.body;
 
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -137,6 +145,23 @@ const updatePost = async (req, res) => {
       });
     }
 
+    if (req.file) {
+      if (post.image?.public_id) {
+        await cloudinary.uploader.destroy(post.image.public_id);
+      }
+
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: "posts",
+      });
+
+      post.image = {
+        url: uploadResult.secure_url,
+        public_id: uploadResult.public_id,
+      };
+
+      fs.unlinkSync(req.file.path);
+    }
+
     post.title = title || post.title;
     post.content = content || post.content;
     post.tags = tags || post.tags;
@@ -149,10 +174,7 @@ const updatePost = async (req, res) => {
       data: post,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 

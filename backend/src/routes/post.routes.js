@@ -7,7 +7,7 @@ const postRouter = express.Router();
 
 postRouter.post("/create-post", authMiddleware, upload.single("image"), createPost);
 postRouter.delete("/delete-post/:id", authMiddleware, deletePost);
-postRouter.put("/update-post/:id", authMiddleware, updatePost);
+postRouter.put("/update-post/:id", authMiddleware, upload.single("image"), updatePost);
 postRouter.get("/all-posts", getAllPosts);
 postRouter.get("/post/:id", getPostById);
 postRouter.get("/posts-by-author/:id", getPostsByAuthor);
