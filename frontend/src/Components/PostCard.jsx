@@ -66,7 +66,18 @@ const PostCard = ({
   };
 
   return (
-    <div className="bg-[#202020] rounded-2xl shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col justify-between h-[300px]">
+    <div className="bg-[#202020] rounded-2xl shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col justify-between min-h-[380px]">
+      
+      {post.image && (
+        <Link to={`/post/${post._id}`}>
+          <img
+            src={post.image.url}
+            alt={post.title}
+            className="w-full h-40 object-cover"
+          />
+        </Link>
+      )}
+
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-3">
           <Link
@@ -79,7 +90,7 @@ const PostCard = ({
           {isAuthor && (
             <div className="relative" ref={menuRef}>
               <button
-                className="text-gray-400 hover:text-gray-200 p-1 rounded-full cursor-pointer"
+                className="text-gray-400 hover:text-gray-200 rounded-full cursor-pointer"
                 onClick={() => setShowMenu(!showMenu)}
                 disabled={isDeleting}
               >
@@ -123,8 +134,7 @@ const PostCard = ({
                 key={index}
                 className="text-xs bg-[#2a2a2a] text-emerald-400 px-2 py-1 rounded-md hover:bg-emerald-900/30 transition-colors flex items-center gap-1"
               >
-                #
-                {tag}
+                # {tag}
               </span>
             ))}
           </div>

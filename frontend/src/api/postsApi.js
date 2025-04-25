@@ -20,15 +20,24 @@ export const getPostsByUser = async (userId) => {
   return response.data;
 };
 
-export const createPost = async (postData) => {
-  const response = await apiClient.post("/posts/create-post", postData);
+export const createPost = async (formData) => {
+  const response = await apiClient.post("/posts/create-post", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
-export const updatePost = async (postId, postData) => {
-  const response = await apiClient.put(`/posts/update-post/${postId}`, {postData});
+export const updatePost = async (postId, formData) => {
+  const response = await apiClient.put(`/posts/update-post/${postId}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
+
 
 export const deletePost = async (postId) => {
   const response = await apiClient.delete(`/posts/delete-post/${postId}`);

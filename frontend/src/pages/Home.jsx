@@ -113,14 +113,24 @@ const Home = () => {
 
   if (posts.length === 0) {
     return (
-      <div className="min-h-screen pb-20">
+      <div className="min-h-screen pb-20 relative">
         <HomeIntro searchData={setSearchTerm} />
-        <p className="text-center py-10 mt-20 text-white text-3xl font-semibold">
+        <p className="text-center py-10 text-white text-4xl font-semibold">
           {isSearching ? "No posts match your search" : "No posts found"}
         </p>
+        {user && (
+          <Link
+            to="/create-post"
+            className="fixed bottom-20 right-20 w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
+            title="Create Post"
+          >
+            <Plus size={24} />
+          </Link>
+        )}
       </div>
     );
   }
+  
 
   return (
     <div className="min-h-screen pb-20">

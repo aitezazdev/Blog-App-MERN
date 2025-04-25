@@ -65,7 +65,7 @@ const Login = () => {
                 <input autoComplete="off"
                   onChange={handleChange}
                   value={data.email}
-                  className="w-full pl-10 py-3 px-4 text-white bg-neutral-800 rounded-lg border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-mint-400 transition-all"
+                  className="w-full pl-10 py-3 px-4 text-white bg-neutral-800 rounded-lg border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all"
                   type="email"
                   name="email"
                   id="email"
@@ -84,7 +84,7 @@ const Login = () => {
                 <input autoComplete="off"
                   onChange={handleChange}
                   value={data.password}
-                  className="w-full pl-10 py-3 px-4 text-white bg-neutral-800 rounded-lg border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-mint-400 transition-all"
+                  className="w-full pl-10 py-3 px-4 text-white bg-neutral-800 rounded-lg border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition-all"
                   type="password"
                   name="password"
                   id="password"
@@ -112,7 +112,7 @@ const Login = () => {
           <div className="mt-8 text-center">
             <p className="text-neutral-400">
               Don't have an account?{" "}
-              <Link to="/register" className="text-emerald-400 hover:text-mint-300 font-semibold">
+              <Link to="/register" className="text-emerald-400 hover:text-emerald-300 font-semibold">
                 Create account
               </Link>
             </p>
