@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPosts, savePost, unsavePost, likePost, unlikePost, deletePost } from "../api/postsApi";
+import {
+  getPosts,
+  togglePostSave,
+  deletePost,
+  toggleLike,
+} from "../api/postsApi";
 import PostCard from "../Components/PostCard";
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
 import { Link } from "react-router-dom";
@@ -35,7 +40,7 @@ const Home = () => {
         }
         return;
       }
-      
+
       setIsSearching(true);
       try {
         const response = await searchPosts(searchTerm);
@@ -45,7 +50,7 @@ const Home = () => {
         toast.error("Search failed. Please try again.");
       }
     };
-    
+
     handleSearch();
   }, [searchTerm]);
 
@@ -63,52 +68,49 @@ const Home = () => {
     return user && post.likes && post.likes.includes(user._id);
   };
 
-  const handleSavePost = async (postId) => {
+  const handleToggleSave = async (postId) => {
     if (!user) return;
-    await savePost(postId);
-    toast.success("Post saved");
-    dispatch(fetchSavedPosts());
-  };
-
-  const handleUnsavePost = async (postId) => {
-    if (!user) return;
-    await unsavePost(postId);
-    toast.success("Post unsaved");
-    dispatch(fetchSavedPosts());
-  };
-
-  const handleLikePost = async (postId) => {
-    if (!user) return;
-    await likePost(postId);
-    
-    if (searchTerm.trim() !== "") {
-      const response = await searchPosts(searchTerm);
-      setPosts(response.data);
-    } else {
-      fetchPosts();
+    try {
+      const response = await togglePostSave(postId);
+      const message =
+        response.action === "saved" ? "Post saved" : "Post unsaved";
+      toast.success(message);
+      dispatch(fetchSavedPosts());
+    } catch (error) {
+      toast.error("Failed to toggle post save state.");
     }
   };
 
-  const handleUnlikePost = async (postId) => {
+  const handleToggleLike = async (postId) => {
     if (!user) return;
-    await unlikePost(postId);
-    
-    if (searchTerm.trim() !== "") {
-      const response = await searchPosts(searchTerm);
-      setPosts(response.data);
-    } else {
-      fetchPosts();
+    try {
+      const response = await toggleLike(postId);
+
+      if (searchTerm.trim() !== "") {
+        const response = await searchPosts(searchTerm);
+        setPosts(response.data);
+      } else {
+        fetchPosts();
+      }
+    } catch (error) {
+      toast.error("Failed to toggle like state.");
     }
   };
 
   const handlePostDeleted = (deletedPostId) => {
     if (!user) return;
     deletePost(deletedPostId);
-    setPosts((prevPosts) => prevPosts.filter(post => post._id !== deletedPostId));
+    setPosts((prevPosts) =>
+      prevPosts.filter((post) => post._id !== deletedPostId)
+    );
   };
 
   if (posts === null) {
-    return <p className="text-center py-10 mt-20 text-white text-3xl font-semibold">Loading...</p>;
+    return (
+      <p className="text-center py-10 mt-20 text-white text-3xl font-semibold">
+        Loading...
+      </p>
+    );
   }
 
   if (posts.length === 0) {
@@ -122,43 +124,38 @@ const Home = () => {
           <Link
             to="/create-post"
             className="fixed bottom-20 right-20 w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
-            title="Create Post"
-          >
+            title="Create Post">
             <Plus size={24} />
           </Link>
         )}
       </div>
     );
   }
-  
 
   return (
     <div className="min-h-screen pb-20">
       <HomeIntro searchData={setSearchTerm} />
-  
-      <div className="w-[90%] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+
+      <div className="w-full px-4 sm:px-6 md:px-10 max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 mt-10">
         {posts.map((post) => (
           <PostCard
             key={post._id}
             post={post}
             user={user}
             isSaved={isPostSaved(post._id)}
-            savePost={() => handleSavePost(post._id)}
-            unsavePost={() => handleUnsavePost(post._id)}
+            toggleSavePost={() => handleToggleSave(post._id)}
             isLiked={isPostLiked(post)}
-            likePost={() => handleLikePost(post._id)}
-            unlikePost={() => handleUnlikePost(post._id)}
+            toggleLikePost={() => handleToggleLike(post._id)}
             onPostDeleted={handlePostDeleted}
           />
         ))}
       </div>
-  
+
       {user && (
         <Link
           to="/create-post"
-          className="fixed bottom-20 right-20 w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
-          title="Create Post"
-        >
+          className="fixed bottom-6 right-6 sm:bottom-10 sm:right-10 w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
+          title="Create Post">
           <Plus size={24} />
         </Link>
       )}
@@ -167,3 +164,4 @@ const Home = () => {
 };
 
 export default Home;
+

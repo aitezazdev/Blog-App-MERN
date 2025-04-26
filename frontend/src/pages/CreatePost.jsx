@@ -3,9 +3,9 @@ import PostForm from '../Components/PostForm';
 
 const CreatePost = () => {
   return (
-    <div className="min-h-screen flex items-start justify-center pt-16 pb-10 px-4">
+    <div className="min-h-screen flex items-start justify-center pt-16 pb-10 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-2xl">
-        <div className="rounded-2xl shadow-lg p-8 bg-[#201f1f] text-white">
+        <div className="rounded-2xl shadow-lg p-3 md:p-8 bg-[#201f1f] text-white">
           <h1 className="text-3xl font-bold mb-6 text-center">
             Create a New Post
           </h1>

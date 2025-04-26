@@ -1,15 +1,10 @@
 import React from 'react';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
 
-const SavePostButton = ({ isSaved, savePost, unsavePost }) => {
+const SavePostButton = ({ isSaved, toggleSavePost }) => {
 
   const toggleSave = () => {
-    if (isSaved) {
-      unsavePost();
-    } else {
-      savePost();
-    }
-    isSaved = !isSaved;
+    toggleSavePost();
   };
 
   return (

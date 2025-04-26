@@ -44,23 +44,13 @@ export const deletePost = async (postId) => {
   return response.data;
 };
 
-export const likePost = async (postId) => {
-  const response = await apiClient.post(`/likes/like/${postId}`);
+export const toggleLike = async (postId) => {
+  const response = await apiClient.post(`/likes/toggle-like/${postId}`);
   return response.data;
 };
 
-export const unlikePost = async (postId) => {
-  const response = await apiClient.post(`/likes/unlike/${postId}`);
-  return response.data;
-};
-
-export const savePost = async (postId) => {
-  const response = await apiClient.post(`/saves/save/${postId}`);
-  return response.data;
-};
-
-export const unsavePost = async (postId) => {
-  const response = await apiClient.post(`/saves/unsave/${postId}`);
+export const togglePostSave = async (postId) => {
+  const response = await apiClient.post(`/saves/toggle-save/${postId}`);
   return response.data;
 };
 

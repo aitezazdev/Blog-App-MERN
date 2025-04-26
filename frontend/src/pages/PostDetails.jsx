@@ -3,15 +3,14 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getPostById,
-  savePost,
-  unsavePost,
-  likePost,
-  unlikePost,
   getPostComments,
+  togglePostSave,
+  toggleLike
 } from "../api";
 import { FaHeart, FaRegHeart, FaRegBookmark, FaBookmark, FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
 import CommentsSection from "../Components/CommentsSection";
+import toast from "react-hot-toast";
 
 const PostDetails = () => {
   const { id } = useParams();
@@ -77,52 +76,21 @@ const PostDetails = () => {
     return user && post?.likes && post.likes.includes(user._id);
   };
 
-  const handleSavePost = async () => {
+  const toggleSave = async () => {
     if (!user) return;
-    await savePost(id);
-    dispatch(fetchSavedPosts());
-  };
-
-  const handleUnsavePost = async () => {
-    if (!user) return;
-    await unsavePost(id);
-    dispatch(fetchSavedPosts());
-  };
-
-  const handleLikePost = async () => {
-    if (!user) return;
-    try {
-      await likePost(id);
-      await fetchPost();
-    } catch (error) {
-      console.error("Error liking post:", error);
-    }
-  };
-
-  const handleUnlikePost = async () => {
-    if (!user) return;
-    try {
-      await unlikePost(id);
-      await fetchPost();
-    } catch (error) {
-      console.error("Error unliking post:", error);
-    }
-  };
-
-  const toggleSave = () => {
+    await togglePostSave(id);
     if (isPostSaved()) {
-      handleUnsavePost();
+      toast.success("Post unsaved");
     } else {
-      handleSavePost();
+      toast.success("Post saved");
     }
+    dispatch(fetchSavedPosts());
   };
 
-  const toggleLike = () => {
-    if (isPostLiked()) {
-      handleUnlikePost();
-    } else {
-      handleLikePost();
-    }
+  const toggleLikePost = async () => {
+    if (!user) return;
+    await toggleLike(id);
+    fetchPost();
   };
 
   const handleEditPost = () => {
@@ -215,7 +183,7 @@ const PostDetails = () => {
             <div className="flex justify-between items-center">
               <div
                 className="flex items-center gap-2 cursor-pointer"
-                onClick={toggleLike}>
+                onClick={toggleLikePost}>
                 {isPostLiked() ? (
                   <div className="flex items-center text-red-500">
                     <FaHeart className="mr-1" />

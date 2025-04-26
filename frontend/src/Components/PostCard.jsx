@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaRegCommentDots, FaEllipsisV, FaEdit, FaTrash, FaTag } from "react-icons/fa";
+import {
+  FaRegCommentDots,
+  FaEllipsisV,
+  FaEdit,
+  FaTrash,
+  FaTag,
+} from "react-icons/fa";
 import SavePostButton from "./SavePostButton";
 import SaveLikeButton from "./SaveLikeButton";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,12 +13,10 @@ import { toast } from "react-hot-toast";
 
 const PostCard = ({
   post,
+  toggleSavePost,
   isSaved,
-  savePost,
-  unsavePost,
   isLiked,
-  likePost,
-  unlikePost,
+  toggleLikePost,
   user,
   onPostDeleted,
 }) => {
@@ -62,29 +66,28 @@ const PostCard = ({
     const words = content.trim().split(" ");
     return words.length <= wordLimit
       ? content
-      : words.slice(0, wordLimit).join(" ") + "…";
+      : words.slice(0, wordLimit).join(" ") + " …";
   };
 
   return (
-    <div className="bg-[#202020] rounded-2xl shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col justify-between min-h-[380px]">
-      
+    <div className="bg-[#202020] rounded-2xl shadow-md hover:shadow-emerald-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col h-[380px]">
       {post.image && (
-        <Link to={`/post/${post._id}`}>
+        <Link to={`/post/${post._id}`} className="h-40 flex-shrink-0">
           <img
             src={post.image.url}
             alt={post.title}
-            className="w-full h-40 object-cover"
+            className="w-full h-full object-cover object-center"
           />
         </Link>
       )}
 
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-3">
+      <div className="p-4 flex flex-col flex-grow justify-between">
+        <div className="flex justify-between items-start mb-1">
           <Link
             to={`/post/${post._id}`}
-            className="text-2xl font-semibold text-white hover:text-emerald-400 transition-colors line-clamp-2"
+            className="text-2xl py-1 font-semibold text-white hover:text-emerald-400 transition-colors line-clamp-2"
           >
-            {post.title}
+            {getTruncatedContent(post.title, 3)}
           </Link>
 
           {isAuthor && (
@@ -122,57 +125,66 @@ const PostCard = ({
 
         <Link
           to={`/post/${post._id}`}
-          className="text-gray-300 mb-2 hover:text-gray-100 transition line-clamp-4 flex-grow"
+          className="text-gray-300 mb-2 line-clamp-2 hover:text-gray-100 transition pb-2 h-12 overflow-hidden"
         >
-          {getTruncatedContent(post.content)}
+          {getTruncatedContent(post.content, 7)}
         </Link>
 
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            {post.tags.map((tag, index) => (
-              <span 
-                key={index}
-                className="text-xs bg-[#2a2a2a] text-emerald-400 px-2 py-1 rounded-md hover:bg-emerald-900/30 transition-colors flex items-center gap-1"
-              >
-                # {tag}
-              </span>
-            ))}
+        <div className="flex flex-col flex-grow">
+          <div>
+            {post.tags?.length > 0 && (
+              <div className="flex flex-wrap gap-1 mb-3">
+                {post.tags.slice(0, 3).map((tag, index) => (
+                  <span
+                    key={index}
+                    className="text-xs bg-[#2a2a2a] text-emerald-400 px-2 py-0.5 rounded-md hover:bg-emerald-900/30 transition-colors flex items-center gap-1"
+                  >
+                    # {tag}
+                  </span>
+                ))}
+                {post.tags.length > 3 && (
+                  <span className="text-xs text-gray-400">
+                    +{post.tags.length - 3}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
-        )}
 
-        <div className="text-xs text-gray-500 mb-2 mt-auto">
-          Posted by{" "}
-          <span className="font-medium text-white">
-            {post.author?.name || "Unknown"}
-          </span>{" "}
-          on {formattedDate}
-        </div>
-
-        <div className="flex justify-between items-center pt-4 border-t border-gray-700">
-          <div className="flex items-center gap-6 text-gray-400">
-            <div className="flex items-center gap-1 cursor-pointer hover:text-red-500 transition">
-              <SaveLikeButton
-                post={post}
-                isLiked={isLiked}
-                likePost={likePost}
-                unlikePost={unlikePost}
-              />
+          <div className="flex flex-col">
+            <div className="text-xs text-gray-500 mb-2">
+              Posted by{" "}
+              <span className="font-medium text-white">
+                {post.author?.name || "Unknown"}
+              </span>{" "}
+              on {formattedDate}
             </div>
-            <Link
-              to={`/post/${post._id}`}
-              className="flex items-center gap-1 cursor-pointer hover:text-emerald-400 transition"
-            >
-              <FaRegCommentDots />
-              <span className="text-sm">{post.comments?.length || 0}</span>
-            </Link>
-          </div>
-          <div className="cursor-pointer text-gray-400 hover:text-emerald-500 transition">
-            <SavePostButton
-              post={post}
-              isSaved={isSaved}
-              savePost={savePost}
-              unsavePost={unsavePost}
-            />
+
+            <div className="flex justify-between items-center pt-2 border-t border-gray-700">
+              <div className="flex items-center gap-4 text-gray-400">
+                <div className="flex items-center gap-1 cursor-pointer hover:text-red-500 transition">
+                  <SaveLikeButton
+                    post={post}
+                    isLiked={isLiked}
+                    toggleLikePost={toggleLikePost}
+                  />
+                </div>
+                <Link
+                  to={`/post/${post._id}`}
+                  className="flex items-center gap-1 cursor-pointer hover:text-emerald-400 transition"
+                >
+                  <FaRegCommentDots />
+                  <span className="text-sm">{post.comments?.length || 0}</span>
+                </Link>
+              </div>
+              <div className="cursor-pointer text-gray-400 hover:text-emerald-500 transition">
+                <SavePostButton
+                  post={post}
+                  isSaved={isSaved}
+                  toggleSavePost={toggleSavePost}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const SaveLikeButton = ({ post, isLiked, likePost, unlikePost }) => {
+const SaveLikeButton = ({ post, isLiked, toggleLikePost }) => {
   const [liked, setLiked] = useState(isLiked);
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
 
@@ -11,11 +11,7 @@ const SaveLikeButton = ({ post, isLiked, likePost, unlikePost }) => {
   }, [isLiked, post.likes]);
 
   const handleToggle = async () => {
-    if (liked) {
-      await unlikePost();
-    } else {
-      await likePost();
-    }
+    toggleLikePost();
   };
 
   return (

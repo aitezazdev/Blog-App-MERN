@@ -20,7 +20,6 @@ const ProfileCard = () => {
       try {
         setLoading(true);
         const response = await getUserProfile();
-
         if (response.success) {
           setProfile(response.data);
           setFormData({
@@ -36,7 +35,6 @@ const ProfileCard = () => {
         setLoading(false);
       }
     };
-
     fetchProfile();
   }, []);
 
@@ -98,13 +96,13 @@ const ProfileCard = () => {
       <span className="text-gray-600">Loading profile...</span>
     </div>
   );
-  
+
   if (error) return (
     <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center text-red-600 max-w-md mx-auto mt-10">
       <p>{error}</p>
     </div>
   );
-  
+
   if (!profile) return (
     <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center text-gray-600 max-w-md mx-auto mt-10">
       No profile data available
@@ -112,16 +110,17 @@ const ProfileCard = () => {
   );
 
   return (
-    <div className="bg-[#171616] rounded-lg shadow-xl p-8 w-[550px] mx-auto mt-10 text-gray-100 border border-[#1f1e1e]">
-      <div className="flex items-center">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+    <div className="bg-[#171616] rounded-lg shadow-xl p-6 sm:p-8 w-full max-w-2xl mx-auto mt-10 text-gray-100 border border-[#1f1e1e]">
+      {/* Profile Header */}
+      <div className="flex flex-col sm:flex-row items-center sm:items-start">
+        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-md mb-4 sm:mb-0">
           {profile.avatarUrl ? (
             <img src={profile.avatarUrl} alt={profile.name} className="w-20 h-20 rounded-full object-cover" />
           ) : (
             getInitials(profile.name)
           )}
         </div>
-        <div className="ml-5 flex-1">
+        <div className="sm:ml-5 text-center sm:text-left w-full">
           {editing ? (
             <input
               type="text"
@@ -134,19 +133,19 @@ const ProfileCard = () => {
           ) : (
             <h2 className="text-2xl font-semibold">{profile.name}</h2>
           )}
-          <p className="text-gray-400 flex items-center mt-1">
+          <p className="text-gray-400 flex items-center justify-center sm:justify-start mt-1">
             <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
             {profile.email}
           </p>
         </div>
       </div>
 
-      <div className="mt-8 bg-[#1f1e1e] rounded-lg p-4">
+      {/* Bio Section */}
+      <div className="mt-6 bg-[#1f1e1e] rounded-lg p-4">
         <h3 className="font-medium text-gray-300 flex items-center mb-2">
           <UserCircle size={18} className="mr-2" />
           About
         </h3>
-        
         {editing ? (
           <textarea
             name="bio"
@@ -163,35 +162,37 @@ const ProfileCard = () => {
         )}
       </div>
 
-      <div className="mt-6 grid grid-cols-3 gap-4 text-center">
+      {/* Stats Section */}
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
         <div className="bg-[#1f1e1e] rounded-lg p-3">
           <p className="text-2xl font-bold text-emerald-400">{profile.createdPosts.length}</p>
           <p className="text-xs uppercase tracking-wider text-gray-400 mt-1">Posts</p>
         </div>
-        
+
         <div className="bg-[#1f1e1e] rounded-lg p-3">
           <p className="text-2xl font-bold text-purple-400">{profile.savedPosts.length}</p>
           <p className="text-xs uppercase tracking-wider text-gray-400 mt-1">Saved</p>
         </div>
-        
-        <div className="bg-[#1f1e1e] rounded-lg p-3 flex flex-col justify-center items-center">
+
+        <div className="bg-[#1f1e1e] rounded-lg p-3">
           <p className="text-sm font-semibold text-gray-300">
             {new Date(profile.createdAt).toLocaleDateString('en-US', {
               year: 'numeric',
-              month: 'short'
+              month: 'short',
             })}
           </p>
           <p className="text-xs uppercase tracking-wider text-gray-400 mt-1">Joined</p>
         </div>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-gray-700 flex justify-between items-center">
+      {/* Action Buttons */}
+      <div className="mt-8 pt-4 border-t border-gray-700 flex flex-col sm:flex-row justify-between gap-4">
         {editing ? (
-          <div className="flex space-x-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={handleUpdateProfile}
               disabled={loading}
-              className="bg-emerald-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-emerald-700 flex items-center transition duration-150 disabled:opacity-50"
+              className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 flex items-center justify-center transition duration-150 disabled:opacity-50"
             >
               {loading ? (
                 <>
@@ -207,7 +208,7 @@ const ProfileCard = () => {
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="bg-gray-700 cursor-pointer text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center transition duration-150"
+              className="bg-gray-700 text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-600 flex items-center justify-center transition duration-150"
             >
               <X size={16} className="mr-2" />
               Cancel
@@ -216,7 +217,7 @@ const ProfileCard = () => {
         ) : (
           <button
             onClick={() => setEditing(true)}
-            className="bg-[#1f1e1e] cursor-pointer text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-700 flex items-center transition duration-150"
+            className="bg-[#1f1e1e] text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-700 flex items-center justify-center transition duration-150"
           >
             <Edit2 size={16} className="mr-2" />
             Edit Profile
@@ -226,7 +227,7 @@ const ProfileCard = () => {
         <button
           onClick={confirmDelete}
           disabled={isDeleting}
-          className="text-red-400 hover:text-red-300 cursor-pointer flex items-center transition duration-150 disabled:opacity-50"
+          className="text-red-400 hover:text-red-300 flex items-center justify-center transition duration-150 disabled:opacity-50"
         >
           <Trash2 size={16} className="mr-1" />
           {isDeleting ? 'Deleting...' : 'Delete Account'}

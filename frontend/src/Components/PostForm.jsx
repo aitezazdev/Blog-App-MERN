@@ -91,7 +91,7 @@ const PostForm = ({ post = null, isEditing = false }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-3 md:space-y-6">
       {error && (
         <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
           {error}
@@ -118,10 +118,10 @@ const PostForm = ({ post = null, isEditing = false }) => {
           Content
         </label>
         <textarea
-          id="content"
+          id="content" spellCheck="false"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          rows="10"
+          rows="8"
           className="w-full border border-gray-300 rounded-xl p-3 text-base focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           placeholder="Write something great..."
           required
@@ -153,7 +153,7 @@ const PostForm = ({ post = null, isEditing = false }) => {
           type="file"
           accept="image/*"
           onChange={(e) => setImage(e.target.files[0])}
-          className="w-full text-sm text-gray-600"
+          className="w-full text-sm text-gray-300 cursor-pointer hover:text-gray-200"
         />
 
         {image && (
@@ -182,7 +182,7 @@ const PostForm = ({ post = null, isEditing = false }) => {
         </div>
         <div className="flex">
           <input
-            id="tagInput"
+            id="tagInput" autoComplete="off"
             type="text"
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
@@ -194,7 +194,7 @@ const PostForm = ({ post = null, isEditing = false }) => {
             type="button"
             onClick={addTag}
             disabled={!tagInput.trim()}
-            className="px-4 bg-emerald-600 text-white font-medium text-sm rounded-r-xl hover:bg-emerald-700 disabled:bg-gray-300 disabled:cursor-not-allowed">
+            className="px-4 bg-emerald-600 text-white font-medium text-sm rounded-r-xl hover:bg-emerald-700 disabled:bg-gray-300 disabled:text-black disabled:cursor-not-allowed">
             Add
           </button>
         </div>
