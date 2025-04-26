@@ -38,6 +38,7 @@ const searchPosts = async (req, res) => {
           title: 1,
           tags: 1,
           content: 1,
+          image: 1,
           createdAt: 1,
           updatedAt: 1,
           author: {

@@ -1,8 +1,8 @@
 import User from "../models/user.model.js";
 import Post from "../models/post.model.js";
 
-// Save/bookmark a post
-const savePost = async (req, res) => {
+// toggle save
+const togglePostSave = async (req, res) => {
   try {
     const postId = req.params.id;
     if (!postId) {
@@ -20,58 +20,36 @@ const savePost = async (req, res) => {
       });
     }
 
-    if (!user.savedPosts.includes(postId)) {
+    const isPostSaved = user.savedPosts.includes(postId);
+
+    if (isPostSaved) {
+      user.savedPosts.pull(postId);
+      await user.save();
+      return res.status(200).json({
+        success: true,
+        message: "Post unsaved",
+        postId,
+        action: "unsaved",
+      });
+    } else {
       user.savedPosts.addToSet(postId);
       await user.save();
+      return res.status(200).json({
+        success: true,
+        message: "Post saved",
+        postId,
+        action: "saved",
+      });
     }
-
-    res.status(200).json({
-      success: true,
-      message: "Post saved",
-      savedPost: postId,
-    });
   } catch (error) {
+    console.error(error); // Because pretending errors don't happen is a luxury for fairy tales
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message || "Internal server error",
     });
   }
 };
 
-// Unsave post
-const unsavePost = async (req, res) => {
-  try {
-    const postId = req.params.id;
-    if (!postId) {
-      return res.status(400).json({
-        success: false,
-        message: "Post id is required",
-      });
-    }
-
-    const user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    user.savedPosts.pull(postId);
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Post unsaved",
-      unsavedPost: postId,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
 
 // all saved posts
 const getSavedPosts = async (req, res) => {
@@ -97,4 +75,4 @@ const getSavedPosts = async (req, res) => {
   }
 };
 
-export { savePost, unsavePost, getSavedPosts };
+export { togglePostSave, getSavedPosts };
