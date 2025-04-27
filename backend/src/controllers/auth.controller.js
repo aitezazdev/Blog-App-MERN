@@ -5,18 +5,11 @@ import jwt from "jsonwebtoken";
 // register user
 const register = async (req, res) => {
   try {
-    const { name, email, password, bio } = req.body;
+    const { name, email, password } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
-      });
-    }
-
-    if (bio && bio.length > 100) {
-      return res.status(400).json({
-        success: false,
-        message: "Bio must be less than 100 characters",
       });
     }
 
@@ -41,7 +34,6 @@ const register = async (req, res) => {
       name,
       email,
       password: hashPassword,
-      bio
     });
 
     const token = jwt.sign(

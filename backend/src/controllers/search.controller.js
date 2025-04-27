@@ -35,10 +35,13 @@ const searchPosts = async (req, res) => {
       },
       {
         $project: {
+          _id: 1,
           title: 1,
           tags: 1,
           content: 1,
           image: 1,
+          likes: 1,
+          comments: 1,
           createdAt: 1,
           updatedAt: 1,
           author: {
@@ -52,13 +55,13 @@ const searchPosts = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Search results fetched via aggregation pipeline. You're welcome.",
+      message: "Search results fetched via aggregation pipeline.",
       data: posts
     });
 
   } catch (error) {
     console.error("Aggregation error:", error);
-    res.status(500).json({ success: false, message: "Server died. Again. It's a trend." });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 

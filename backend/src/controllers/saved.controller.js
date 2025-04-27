@@ -42,7 +42,7 @@ const togglePostSave = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error(error); // Because pretending errors don't happen is a luxury for fairy tales
+    console.error(error);
     res.status(500).json({
       success: false,
       message: error.message || "Internal server error",

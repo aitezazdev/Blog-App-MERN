@@ -99,7 +99,7 @@ const deletePost = async (req, res) => {
       await cloudinary.uploader.destroy(post.image.public_id);
     }
 
-    await Comment.deleteMany({ post: post._id });
+    await Comment.deleMany({ post: post._id });
 
     await post.deleteOne();
 
@@ -168,13 +168,13 @@ const updatePost = async (req, res) => {
 
     await post.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Post updated successfully",
       data: post,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
