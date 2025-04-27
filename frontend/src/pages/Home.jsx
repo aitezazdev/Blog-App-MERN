@@ -72,8 +72,7 @@ const Home = () => {
     if (!user) return;
     try {
       const response = await togglePostSave(postId);
-      const message =
-        response.action === "saved" ? "Post saved" : "Post unsaved";
+      const message = response.action === "saved" ? "Post saved" : "Post unsaved";
       toast.success(message);
       dispatch(fetchSavedPosts());
     } catch (error) {
@@ -84,7 +83,7 @@ const Home = () => {
   const handleToggleLike = async (postId) => {
     if (!user) return;
     try {
-      const response = await toggleLike(postId);
+      await toggleLike(postId);
 
       if (searchTerm.trim() !== "") {
         const response = await searchPosts(searchTerm);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPostById } from '../api';
+import { getPostById } from '../api/postsApi';
 import { toast } from 'react-hot-toast';
 import PostForm from '../Components/PostForm';
 

@@ -1,13 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { getPostById, togglePostSave, toggleLike } from "../api/postsApi";
+import { getPostComments } from "../api/commentsApi";
 import {
-  getPostById,
-  getPostComments,
-  togglePostSave,
-  toggleLike
-} from "../api";
-import { FaHeart, FaRegHeart, FaRegBookmark, FaBookmark, FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
+  FaHeart,
+  FaRegHeart,
+  FaRegBookmark,
+  FaBookmark,
+  FaEllipsisV,
+  FaEdit,
+  FaTrash,
+} from "react-icons/fa";
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
 import CommentsSection from "../Components/CommentsSection";
 import toast from "react-hot-toast";
@@ -133,29 +137,26 @@ const PostDetails = () => {
             <h1 className="text-3xl font-semibold text-gray-100">
               {post.title}
             </h1>
-            
+
             {isAuthor && (
               <div className="relative" ref={menuRef}>
-                <button 
+                <button
                   className="text-gray-400 hover:text-emerald-400 p-1 rounded-full"
-                  onClick={() => setShowMenu(!showMenu)}
-                >
+                  onClick={() => setShowMenu(!showMenu)}>
                   <FaEllipsisV />
                 </button>
-                
+
                 {showMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-[#252525] rounded-md shadow-lg z-10 border border-gray-700">
                     <div className="py-1">
                       <button
                         onClick={handleEditPost}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-[#333333] flex items-center gap-2"
-                      >
+                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-[#333333] flex items-center gap-2">
                         <FaEdit /> Edit Post
                       </button>
                       <button
                         onClick={handleDeletePost}
-                        className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-[#333333] flex items-center gap-2"
-                      >
+                        className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-[#333333] flex items-center gap-2">
                         <FaTrash /> Delete Post
                       </button>
                     </div>
@@ -164,7 +165,7 @@ const PostDetails = () => {
               </div>
             )}
           </div>
-          
+
           <div className="flex items-center gap-2 mb-5">
             <span className="text-sm text-gray-400">
               Posted by{" "}
@@ -188,14 +189,16 @@ const PostDetails = () => {
                   <div className="flex items-center text-red-500">
                     <FaHeart className="mr-1" />
                     <span className="text-sm">
-                      {post.likes?.length || 0} { post.likes?.length === 1 ? "like" : "likes" }
+                      {post.likes?.length || 0}{" "}
+                      {post.likes?.length === 1 ? "like" : "likes"}
                     </span>
                   </div>
                 ) : (
                   <div className="flex items-center text-gray-400 hover:text-red-500 transition">
                     <FaRegHeart className="mr-1" />
                     <span className="text-sm">
-                      {post.likes?.length || 0} { post.likes?.length === 1 ? "like" : "likes" }
+                      {post.likes?.length || 0}{" "}
+                      {post.likes?.length === 1 ? "like" : "likes"}
                     </span>
                   </div>
                 )}
@@ -215,11 +218,7 @@ const PostDetails = () => {
         </div>
       </div>
 
-      <CommentsSection
-        postId={id}
-        user={user}
-        initialComments={comments}
-      />
+      <CommentsSection postId={id} user={user} initialComments={comments} />
     </div>
   );
 };
