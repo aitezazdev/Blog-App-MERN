@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getPostById, togglePostSave, toggleLike } from "../api/postsApi";
+import { getPostById, togglePostSave, toggleLike, deletePost } from "../api/postsApi";
 import { getPostComments } from "../api/commentsApi";
 import {
   FaHeart,
@@ -23,6 +23,7 @@ const PostDetails = () => {
   const [loading, setLoading] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { savedPosts } = useSelector((state) => state.savedPosts);
@@ -99,12 +100,15 @@ const PostDetails = () => {
 
   const handleEditPost = () => {
     setShowMenu(false);
-    console.log("Edit post", id);
+    navigate(`/edit-post/${post._id}`);
   };
 
-  const handleDeletePost = () => {
+  const handleDeletePost = async () => {
     setShowMenu(false);
-    console.log("Delete post", id);
+    if (!user) return;
+    await deletePost(id);
+    toast.success("Post deleted");
+    navigate("/");
   };
 
   if (loading) {

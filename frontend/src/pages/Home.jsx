@@ -96,9 +96,10 @@ const Home = () => {
     }
   };
 
-  const handlePostDeleted = (deletedPostId) => {
+  const handlePostDeleted = async (deletedPostId) => {
     if (!user) return;
-    deletePost(deletedPostId);
+    await deletePost(deletedPostId);
+    toast.success("Post deleted");
     setPosts((prevPosts) =>
       prevPosts.filter((post) => post._id !== deletedPostId)
     );
@@ -122,7 +123,7 @@ const Home = () => {
         {user && (
           <Link
             to="/create-post"
-            className="fixed bottom-20 right-20 w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
+            className="fixed bottom-20 right-20 md:bottom-20 md:right-20 w-14 h-14 md:w-20 md:h-20 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
             title="Create Post">
             <Plus size={24} />
           </Link>
@@ -132,10 +133,10 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen pb-20 md:px-16">
       <HomeIntro searchData={setSearchTerm} />
 
-      <div className="w-full px-4 sm:px-6 md:px-10 max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 mt-10">
+      <div className="w-full px-4 sm:px-6 md:px-10 max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 sm:gap-6 mt-10">
         {posts.map((post) => (
           <PostCard
             key={post._id}
@@ -153,7 +154,7 @@ const Home = () => {
       {user && (
         <Link
           to="/create-post"
-          className="fixed bottom-6 right-6 sm:bottom-10 sm:right-10 w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
+          className="fixed bottom-10 right-10 md:bottom-20 md:right-20 w-14 h-14 md:w-20 md:h-20 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
           title="Create Post">
           <Plus size={24} />
         </Link>

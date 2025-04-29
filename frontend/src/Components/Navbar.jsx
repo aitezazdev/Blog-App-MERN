@@ -30,7 +30,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 text-white bg-black p-5 transition-all duration-300">
+      <nav className="fixed top-0 left-0 right-0 z-50 md:px-24 text-white bg-black p-5 transition-all duration-300">
         <div className="container mx-auto flex justify-between items-center">
           <NavLink to="/" className="text-xl font-bold">
             BlogApp

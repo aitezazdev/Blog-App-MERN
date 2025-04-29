@@ -33,14 +33,14 @@ const SavedPosts = () => {
     );
 
   return (
-    <div className="min-h-screen w-full text-white py-10">
+    <div className="min-h-screen w-full text-white py-10 md:px-16">
       <div className=" mx-auto">
         <h2 className="text-3xl font-bold mx-8 mb-10 border-b border-neutral-800 pb-3">
           Your Bookmarked Posts
         </h2>
 
         {savedPosts.length > 0 ? (
-          <div className="w-full px-4 sm:px-6 md:px-10 max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 mt-10">
+          <div className="w-full px-4 sm:px-6 md:px-10 max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 sm:gap-6 mt-10">
             {savedPosts.map((post) => (
                 <PostCard
                   post={post}

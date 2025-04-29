@@ -41,6 +41,7 @@ export const updatePost = async (postId, formData) => {
 
 export const deletePost = async (postId) => {
   const response = await apiClient.delete(`/posts/delete-post/${postId}`);
+  console.log(response.data);
   return response.data;
 };
 

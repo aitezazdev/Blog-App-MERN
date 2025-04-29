@@ -53,7 +53,6 @@ const PostCard = ({
       setIsDeleting(true);
       if (onPostDeleted) onPostDeleted(post._id);
       setShowMenu(false);
-      toast.success("Post deleted successfully");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete post");
       console.error("Error deleting post:", error);
@@ -70,9 +69,9 @@ const PostCard = ({
   };
 
   return (
-    <div className="bg-[#202020] rounded-2xl shadow-md hover:shadow-emerald-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col h-[380px]">
+    <div className="bg-[#202020] rounded-2xl shadow-md hover:shadow-emerald-500/30 transition-all duration-300 border border-[#1e1e1e] overflow-hidden flex flex-col h-[450px]">
       {post.image && (
-        <Link to={`/post/${post._id}`} className="h-40 flex-shrink-0">
+        <Link to={`/post/${post._id}`} className="h-56 flex-shrink-0">
           <img
             src={post.image.url}
             alt={post.title}
@@ -87,7 +86,7 @@ const PostCard = ({
             to={`/post/${post._id}`}
             className="text-2xl py-1 font-semibold text-white hover:text-emerald-400 transition-colors line-clamp-2"
           >
-            {getTruncatedContent(post.title, 3)}
+            {getTruncatedContent(post.title, 4)}
           </Link>
 
           {isAuthor && (
