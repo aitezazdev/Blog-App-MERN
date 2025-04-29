@@ -99,7 +99,7 @@ const deletePost = async (req, res) => {
       await cloudinary.uploader.destroy(post.image.public_id);
     }
 
-    await Comment.deleMany({ post: post._id });
+    await Comment.deleteMany({ post: post._id });
 
     await post.deleteOne();
 
