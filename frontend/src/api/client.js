@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://blog-app-mern-production.up.railway.app';
 
 const apiClient = axios.create({
   baseURL: API_URL,

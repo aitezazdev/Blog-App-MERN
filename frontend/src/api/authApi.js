@@ -1,7 +1,7 @@
 import axios from "axios";
 import apiClient from "./client";
 
-const API = "http://localhost:3000";
+const API = "https://blog-app-mern-production.up.railway.app";
 
 export const login = async (userData) => {
   const response = await axios.post(`${API}/auth/login`, userData);

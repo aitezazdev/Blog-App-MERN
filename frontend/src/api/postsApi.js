@@ -1,10 +1,11 @@
 import axios from "axios";
 import apiClient from "./client";
 
-const API = "http://localhost:3000";
+const API = "https://blog-app-mern-production.up.railway.app";
 
 export const getPosts = async () => {
   const response = await axios.get(`${API}/posts/all-posts`);
+  console.log(response.data);
   return response.data;
 };
 
