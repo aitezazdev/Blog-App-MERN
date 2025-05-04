@@ -9,13 +9,14 @@ import {
 import PostCard from "../Components/PostCard";
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
 import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, Loader } from "lucide-react";
 import HomeIntro from "../Components/HomeIntro";
 import toast from "react-hot-toast";
 import { searchPosts } from "../api/searchApi";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const dispatch = useDispatch();
@@ -23,8 +24,16 @@ const Home = () => {
   const { user } = useSelector((state) => state.auth);
 
   const fetchPosts = async () => {
-    const response = await getPosts();
-    setPosts(response.data);
+    setLoading(true);
+    try {
+      const response = await getPosts();
+      setPosts(response.data);
+    } catch (error) {
+      toast.error("Failed to load posts");
+      setPosts([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -42,20 +51,25 @@ const Home = () => {
       }
 
       setIsSearching(true);
+      setLoading(true);
       try {
         const response = await searchPosts(searchTerm);
         setPosts(response.data);
       } catch (error) {
         console.error("Search failed:", error);
         toast.error("Search failed. Please try again.");
+        setPosts([]);
+      } finally {
+        setLoading(false);
       }
     };
 
-    handleSearch();
+    const debounceTimer = setTimeout(handleSearch, 500);
+    return () => clearTimeout(debounceTimer);
   }, [searchTerm]);
 
   useEffect(() => {
-    if (user && posts.length > 0) {
+    if (user && posts && posts.length > 0) {
       dispatch(fetchSavedPosts());
     }
   }, [user, posts, dispatch]);
@@ -83,14 +97,20 @@ const Home = () => {
   const handleToggleLike = async (postId) => {
     if (!user) return;
     try {
-      await toggleLike(postId);
-
-      if (searchTerm.trim() !== "") {
-        const response = await searchPosts(searchTerm);
-        setPosts(response.data);
-      } else {
-        fetchPosts();
-      }
+      const response = await toggleLike(postId);
+      
+      setPosts(prevPosts => {
+        return prevPosts.map(post => {
+          if (post._id === postId) {
+            const updatedLikes = post.likes.includes(user._id) 
+              ? post.likes.filter(id => id !== user._id)
+              : [...post.likes, user._id];
+              
+            return { ...post, likes: updatedLikes };
+          }
+          return post;
+        });
+      });
     } catch (error) {
       toast.error("Failed to toggle like state.");
     }
@@ -105,31 +125,44 @@ const Home = () => {
     );
   };
 
-  if (posts === null) {
-    return (
-      <p className="text-center py-10 mt-20 text-white text-3xl font-semibold">
-        Loading...
-      </p>
-    );
-  }
+  const renderCreatePostButton = () => (
+    <Link
+      to="/create-post"
+      className="fixed bottom-10 right-10 md:bottom-20 md:right-20 w-14 h-14 md:w-20 md:h-20 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
+      title="Create Post">
+      <Plus size={24} />
+    </Link>
+  );
 
-  if (posts.length === 0) {
-    return (
-      <div className="min-h-screen pb-20 relative">
-        <HomeIntro searchData={setSearchTerm} />
+  const renderLoadingState = () => (
+    <div className="min-h-screen pb-20 relative">
+      <HomeIntro searchData={setSearchTerm} />
+      <div className="flex flex-col items-center justify-center py-20">
+        <Loader size={48} className="text-emerald-500 animate-spin" />
+        <p className="text-white text-xl mt-4">Loading posts...</p>
+      </div>
+      {user && renderCreatePostButton()}
+    </div>
+  );
+
+  const renderEmptyState = () => (
+    <div className="min-h-screen pb-20 relative">
+      <HomeIntro searchData={setSearchTerm} />
+      <div className="flex flex-col items-center justify-center py-20">
         <p className="text-center py-10 text-white text-4xl font-semibold">
           {isSearching ? "No posts match your search" : "No posts found"}
         </p>
-        {user && (
-          <Link
-            to="/create-post"
-            className="fixed bottom-20 right-20 md:bottom-20 md:right-20 w-14 h-14 md:w-20 md:h-20 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
-            title="Create Post">
-            <Plus size={24} />
-          </Link>
-        )}
       </div>
-    );
+      {user && renderCreatePostButton()}
+    </div>
+  );
+
+  if (loading) {
+    return renderLoadingState();
+  }
+
+  if (!posts || posts.length === 0) {
+    return renderEmptyState();
   }
 
   return (
@@ -151,17 +184,9 @@ const Home = () => {
         ))}
       </div>
 
-      {user && (
-        <Link
-          to="/create-post"
-          className="fixed bottom-10 right-10 md:bottom-20 md:right-20 w-14 h-14 md:w-20 md:h-20 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg hover:bg-emerald-700 transition-all hover:scale-110 z-20"
-          title="Create Post">
-          <Plus size={24} />
-        </Link>
-      )}
+      {user && renderCreatePostButton()}
     </div>
   );
 };
 
 export default Home;
-

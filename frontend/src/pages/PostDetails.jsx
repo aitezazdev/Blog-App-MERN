@@ -15,6 +15,7 @@ import {
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
 import CommentsSection from "../Components/CommentsSection";
 import toast from "react-hot-toast";
+import { Loader } from "lucide-react";
 
 const PostDetails = () => {
   const { id } = useParams();
@@ -111,12 +112,17 @@ const PostDetails = () => {
     navigate("/");
   };
 
+  const renderLoadingState = () => (
+    <div className="min-h-screen pt-20 relative">
+       <div className="flex flex-col items-center justify-center py-20">
+         <Loader size={48} className="text-emerald-500 animate-spin" />
+         <p className="text-white text-xl mt-4">Loading post details...</p>
+       </div>
+     </div>
+   );
+
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-[#0f0f0f] text-gray-300">
-        <div className="text-xl">Loading post details...</div>
-      </div>
-    );
+    return renderLoadingState();
   }
 
   if (!post) {

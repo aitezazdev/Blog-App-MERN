@@ -4,10 +4,11 @@ import PostCard from "../Components/PostCard";
 import { fetchSavedPosts } from "../store/Slices/savedPosts";
 import { togglePostSave } from "../api/postsApi";
 import toast from "react-hot-toast";
+import { Loader } from "lucide-react";
 
 const SavedPosts = () => {
   const dispatch = useDispatch();
-  const { savedPosts, loading, error } = useSelector((state) => state.savedPosts);
+  const { savedPosts, loading } = useSelector((state) => state.savedPosts);
 
   useEffect(() => {
     dispatch(fetchSavedPosts());
@@ -19,18 +20,18 @@ const SavedPosts = () => {
     dispatch(fetchSavedPosts());
   };
 
-  if (loading)
-    return (
-      <p className="text-center py-10 text-neutral-400">
-        Loading saved posts...
-      </p>
-    );
-  if (error)
-    return (
-      <p className="text-center text-red-400 py-10">
-        Something went wrong: {error}
-      </p>
-    );
+  const renderLoadingState = () => (
+   <div className="min-h-screen pt-20 relative">
+      <div className="flex flex-col items-center justify-center py-20">
+        <Loader size={48} className="text-emerald-500 animate-spin" />
+        <p className="text-white text-xl mt-4">Loading saved posts...</p>
+      </div>
+    </div>
+  );
+
+  if (loading) {
+    return renderLoadingState();
+  }
 
   return (
     <div className="min-h-screen w-full text-white py-10 md:px-16">
@@ -42,7 +43,7 @@ const SavedPosts = () => {
         {savedPosts.length > 0 ? (
           <div className="w-full px-4 sm:px-6 md:px-10 max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 sm:gap-6 mt-10">
             {savedPosts.map((post) => (
-                <PostCard
+                <PostCard key={post._id}
                   post={post}
                   isSaved={true}
                   toggleSavePost={() => toggleSavePost(post._id)}

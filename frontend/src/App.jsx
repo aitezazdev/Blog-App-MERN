@@ -12,10 +12,12 @@ import ProfileCard from "./Components/ProfileCard";
 import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 import EditPostPage from "./pages/EditPost";
+import GoToTop from "./Components/GoToTop";
 
 function App() {
   return (
     <div className="min-h-screen bg-[#0f0f0f]">
+      <GoToTop />
       <Toaster />
       <ToastContainer />
       <Navbar />

@@ -5,13 +5,11 @@ const API = "https://blog-app-mern-production.up.railway.app";
 
 export const getPosts = async () => {
   const response = await axios.get(`${API}/posts/all-posts`);
-  console.log(response.data);
   return response.data;
 };
 
 export const getPostById = async (postId) => {
   const response = await axios.get(`${API}/posts/post/${postId}`);
-  console.log(response.data);
   
   return response.data;
 };
@@ -42,7 +40,6 @@ export const updatePost = async (postId, formData) => {
 
 export const deletePost = async (postId) => {
   const response = await apiClient.delete(`/posts/delete-post/${postId}`);
-  console.log(response.data);
   return response.data;
 };
 
