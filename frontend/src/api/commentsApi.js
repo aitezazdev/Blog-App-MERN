@@ -1,7 +1,7 @@
 import axios from "axios";
 import apiClient from "./client";
 
-const API = "https://blog-app-mern-production.up.railway.app";
+const API = import.meta.env.VITE_API_URL;
 
 export const getPostComments = async (postId) => {
   const response = await axios.get(`${API}/comments/get-comments/${postId}`);

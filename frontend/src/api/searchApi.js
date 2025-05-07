@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "https://blog-app-mern-production.up.railway.app/user-posts/search";
+const API = import.meta.env.VITE_API_URL;
 
 export const searchPosts = async (data) => {
   const response = await axios.get(`${API}?query=${data}`);

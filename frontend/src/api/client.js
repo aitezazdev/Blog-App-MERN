@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'https://blog-app-mern-production.up.railway.app';
+const API = import.meta.env.VITE_API_URL;
 
 const apiClient = axios.create({
-  baseURL: API_URL,
+  baseURL: API,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -1,7 +1,7 @@
 import axios from "axios";
 import apiClient from "./client";
 
-const API = "https://blog-app-mern-production.up.railway.app";
+const API = import.meta.env.VITE_API_URL;
 
 export const login = async (userData) => {
   const response = await axios.post(`${API}/auth/login`, userData);
