@@ -18,7 +18,7 @@ const HomeIntro = ({ searchData }) => {
 
   return (
     <section className="min-h-[60vh] flex flex-col justify-center items-center text-center px-4 sm:px-6 md:px-10 py-10 relative z-10">
-      <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
         Explore Thought-Provoking <br className="hidden sm:block" /> Blogs & Discussions
       </h1>
       <p className="text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl mb-8">

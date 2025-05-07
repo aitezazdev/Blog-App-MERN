@@ -13,6 +13,9 @@ import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 import EditPostPage from "./pages/EditPost";
 import GoToTop from "./Components/GoToTop";
+import Footer from "./Components/Footer";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -35,8 +38,11 @@ function App() {
           </Route>
 
           <Route path="/post/:id" element={<PostDetails />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }

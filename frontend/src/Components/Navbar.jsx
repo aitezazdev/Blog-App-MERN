@@ -33,7 +33,7 @@ const Navbar = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 md:px-24 text-white bg-black p-5 transition-all duration-300">
         <div className="container mx-auto flex justify-between items-center">
           <NavLink to="/" className="text-xl font-bold">
-            BlogApp
+            ZazBlog
           </NavLink>
 
           <div className="hidden md:flex items-center space-x-6">
@@ -46,6 +46,26 @@ const Navbar = () => {
               }
             >
               Home
+            </NavLink>
+
+            <NavLink
+              to="/about"
+              className={({ isActive }) => 
+                `px-1 transition-colors ${
+                  isActive ? "text-white border-b-2 border-b-emerald-300" : "text-gray-300 hover:text-white"
+                }`
+              }
+            >
+              About
+            </NavLink><NavLink
+              to="/contact"
+              className={({ isActive }) => 
+                `px-1 transition-colors ${
+                  isActive ? "text-white border-b-2 border-b-emerald-300" : "text-gray-300 hover:text-white"
+                }`
+              }
+            >
+              Contact
             </NavLink>
 
             {user ? (
@@ -133,6 +153,24 @@ const Navbar = () => {
             }
           >
             Home
+          </NavLink>
+          <NavLink 
+            to="/about" 
+            onClick={() => setMenuOpen(false)} 
+            className={({ isActive }) => 
+              `text-white ${isActive ? "font-semibold text-emerald-400" : ""}`
+            }
+          >
+            About
+          </NavLink>
+          <NavLink 
+            to="/contact" 
+            onClick={() => setMenuOpen(false)} 
+            className={({ isActive }) => 
+              `text-white ${isActive ? "font-semibold text-emerald-400" : ""}`
+            }
+          >
+            Contact
           </NavLink>
           {user ? (
             <>

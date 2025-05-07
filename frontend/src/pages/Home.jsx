@@ -83,7 +83,10 @@ const Home = () => {
   };
 
   const handleToggleSave = async (postId) => {
-    if (!user) return;
+    if (!user) {
+      toast.error("You must be logged in to save a post.");
+      return;
+    };
     try {
       const response = await togglePostSave(postId);
       const message = response.action === "saved" ? "Post saved" : "Post unsaved";
@@ -95,7 +98,10 @@ const Home = () => {
   };
 
   const handleToggleLike = async (postId) => {
-    if (!user) return;
+    if (!user) {
+      toast.error("You must be logged in to like a post.");
+      return;
+    };
     try {
       const response = await toggleLike(postId);
       
